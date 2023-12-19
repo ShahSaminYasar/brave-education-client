@@ -12,8 +12,8 @@ const App = () => {
   return (
     <>
       <Header />
-      <main className="flex flex-col justify-center items-center py-10 text-[17px]">
-        <div className="w-full max-w-[700px]">
+      <main className="flex flex-col justify-center items-center py-5 text-[17px] px-3">
+        <div className="w-full max-w-[700px] mt-[140px] sm:mt-[100px]">
           <ul className="steps text-slate-600 text-[17px] w-full">
             {steps?.map((step) => (
               <li
