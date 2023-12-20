@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EnrolledCourseBox from "../../Components/EnrolledCourse/EnrolledCourseBox";
 import Title from "../../Components/Title";
 import Header from "../../Components/Header";
 import EmptyGif from "../../assets/empty.gif";
+import useSettings from "../../hooks/useSettings";
 
 const EnrolledCourses = () => {
   const enrolled = JSON.parse(localStorage.getItem("be_enrolled_courses"));
-  console.log(enrolled);
+  const {setCurrentStep} = useSettings();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -34,9 +36,12 @@ const EnrolledCourses = () => {
                 />
                 <p className="block text-[17px] text-center">
                   You haven&apos;t enrolled in any course/test yet.{" "}
-                  <Link to="/" className="text-indigo-600">
+                  <button onClick={() => {
+                    setCurrentStep(1);
+                    return navigate("/");
+                  }} className="text-indigo-600">
                     Enroll now?
-                  </Link>
+                  </button>
                 </p>
               </>
             )}

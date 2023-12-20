@@ -3,6 +3,8 @@ import { Link, Navigate } from "react-router-dom";
 import useSettings from "../hooks/useSettings";
 import useCourses from "../hooks/useCourses";
 import moment from "moment";
+import { IoLocationOutline } from "react-icons/io5";
+import { IoCallOutline } from "react-icons/io5";
 
 const Checkout = () => {
   const query = new URLSearchParams(window.location.search);
@@ -18,7 +20,6 @@ const Checkout = () => {
     const check = enrolledCourses?.filter(
       (enrolledCourse) => enrolledCourse?.uid === details?.uid
     );
-    console.log(check);
     if (!check || check?.length === 0) {
       let newEnrolledArray = [];
       if (enrolledCourses) {
@@ -38,7 +39,7 @@ const Checkout = () => {
   }
 
   if (!details?.uid) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />; TODO
   }
 
   const handleRestart = () => {
@@ -103,15 +104,24 @@ const Checkout = () => {
                         {moment(details?.schedule?.date).format("D MMMM YYYY")}
                       </span>
                     </p>
-                    <p className="flex flex-col justify-center items-center gap-2 text-slate-700 font-[400] my-3 text-center">
-                      <FaLocationPin className="text-[37px] opacity-60" /> House
-                      No. 05, 1st floor, Block-C (Main Road), Shahjalal
-                      Upashahar Main Road, Sylhet 3100 <br />{" "}
-                      <p className="flex flex-row items-center gap-1 font-[500]">
-                        <FaPhone />
-                        01916-074609
-                      </p>
-                    </p>
+                    <div className="grid grid-cols-2 gap-2 items-start my-3 text-[15px] text-slate-700">
+                      <div className="grid grid-cols-6 items-center border-[1px] border-slate-200 p-2">
+                        <div className="grid col-span-1">
+                          <IoLocationOutline className="text-[30px]" />
+                        </div>
+                        <div className="col-span-5">
+                          House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-6 items-center border-[1px] border-slate-200 p-2">
+                        <div className="grid col-span-1">
+                          <FaPhone className="text-[30px]" />
+                        </div>
+                        <div className="col-span-5">
+                          House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100
+                        </div>
+                      </div>
+                    </div>
                     {/* <div className="divider my-[0px]"></div> */}
                     <div className="grid sm:flex sm:flex-row gap-2 sm:gap-3 items-center justify-center w-full mt-5 text-center">
                       <button className="rounded-md py-2 px-3 text-[16px] bg-rose-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none">
@@ -132,9 +142,8 @@ const Checkout = () => {
                     </div>
                   </div>
                   <span
-                    className={`absolute -top-[5px] -right-[5px] text-[30px] font-[700] text-white bg-rose-900 rounded-md px-2 leading-[40px] ${
-                      courseDetails?.[0]?.offerPrice === 0 ? "hidden" : ""
-                    }`}
+                    className={`absolute -top-[5px] -right-[5px] text-[30px] font-[700] text-white bg-rose-900 rounded-md px-2 leading-[40px] ${courseDetails?.[0]?.offerPrice === 0 ? "hidden" : ""
+                      }`}
                   >
                     {details?.paid ? "PAID" : "UNPAID"}
                   </span>
