@@ -47,7 +47,7 @@ const Details = () => {
               type="text"
               defaultValue={localStudentData?.name}
               placeholder="Your Full Name"
-              className="input input-bordered text-[17px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
+              className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
             />
           </div>
           <div>
@@ -62,7 +62,7 @@ const Details = () => {
               type="text"
               defaultValue={localStudentData?.email}
               placeholder="Your Email Address"
-              className="input input-bordered text-[17px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
+              className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
             />
           </div>
           <div>
@@ -78,7 +78,7 @@ const Details = () => {
               type="number"
               defaultValue={localStudentData?.phone}
               placeholder="Your Active Phone Number"
-              className="input input-bordered text-[17px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
+              className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
             />
           </div>
           <div>
@@ -89,7 +89,10 @@ const Details = () => {
               Gender
             </label>
             <div className="flex flex-row gap-1 items-center">
-              <label htmlFor="male" className="text-[17px] text-slate-800">
+              <label
+                htmlFor="male"
+                className="text-[17px] 2xl:text-[20px] text-slate-800"
+              >
                 Male
               </label>
               <input
@@ -102,7 +105,10 @@ const Details = () => {
                 value="male"
                 className="radio radio-sm radio-primary mr-4"
               />
-              <label htmlFor="female" className="text-[17px] text-slate-800">
+              <label
+                htmlFor="female"
+                className="text-[17px] 2xl:text-[20px] text-slate-800"
+              >
                 Female
               </label>
               <input
@@ -120,7 +126,7 @@ const Details = () => {
         </div>
 
         {/* Navigation */}
-        <div className="w-full max-w-[700px] flex flex-row justify-between items-center text-[17px] font-[400] text-neutral-800 mt-8">
+        <div className="w-full max-w-[700px] flex flex-row justify-between items-center text-[17px] 2xl:text-[20px] font-[400] text-neutral-800 mt-8">
           <button
             type="button"
             className="py-1 px-4 bg-white text-neutral-500 rounded-md border-[2px] border-neutral-300 active:scale-90"

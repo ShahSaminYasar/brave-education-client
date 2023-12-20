@@ -13,7 +13,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <SettingsProvider>
       <QueryClientProvider client={queryClient}>
-        <Toaster />
+        <div className="fixed top-0 w-full left-0 z-[99999]">
+          <Toaster />
+        </div>
         <RouterProvider router={router} />
       </QueryClientProvider>
     </SettingsProvider>

@@ -1,4 +1,4 @@
-import { FaCheckDouble } from "react-icons/fa6";
+import { FaCheckDouble, FaLocationPin, FaPhone } from "react-icons/fa6";
 import { Link, Navigate } from "react-router-dom";
 import useSettings from "../hooks/useSettings";
 import useCourses from "../hooks/useCourses";
@@ -48,7 +48,7 @@ const Checkout = () => {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4">
-      <section className="bg-white rounded-md px-5 py-7 text-slate-800 text-[17px] font-[500] shadow-md w-full max-w-[660px] relative">
+      <section className="bg-white rounded-md px-5 py-7 text-slate-800 text-[17px] 2xl:text-[20px] font-[500] shadow-md w-full max-w-[660px] relative">
         {status !== "success" ? (
           <>
             <p className="text-[30px] text-slate-800 font-[500] block text-center mb-5">
@@ -102,6 +102,15 @@ const Checkout = () => {
                       <span className="text-indigo-800 font-[600]">
                         {moment(details?.schedule?.date).format("D MMMM YYYY")}
                       </span>
+                    </p>
+                    <p className="flex flex-col justify-center items-center gap-2 text-slate-700 font-[400] my-3 text-center">
+                      <FaLocationPin className="text-[37px] opacity-60" /> House
+                      No. 05, 1st floor, Block-C (Main Road), Shahjalal
+                      Upashahar Main Road, Sylhet 3100 <br />{" "}
+                      <p className="flex flex-row items-center gap-1 font-[500]">
+                        <FaPhone />
+                        01916-074609
+                      </p>
                     </p>
                     {/* <div className="divider my-[0px]"></div> */}
                     <div className="grid sm:flex sm:flex-row gap-2 sm:gap-3 items-center justify-center w-full mt-5 text-center">

@@ -54,9 +54,7 @@ const Confirmation = () => {
           return navigate("/checkout?status=success");
         } else {
           setConfirming(false);
-          return toast.error(
-            data?.message || "An error occured, please try again."
-          );
+          return toast(data?.message || "An error occured, please try again.");
         }
       }
     } catch (error) {
@@ -87,7 +85,7 @@ const Confirmation = () => {
       ) : (
         <div className="flex flex-col gap-3 w-full">
           <button
-            className={`w-full max-w-[500px] h-[90px] mx-auto flex flex-row justify-between items-center gap-3 rounded-md px-5 py-2 text-[14px] sm:text-[17px] ${
+            className={`w-full max-w-[500px] h-[90px] mx-auto flex flex-row justify-between items-center gap-3 rounded-md px-5 py-2 text-[14px] sm:text-[17px] 2xl:text-[20px] ${
               paymentMethod === "bkash"
                 ? "bg-[#E2116E] text-slate-100"
                 : "bg-[#fffdfe] text-slate-500"
@@ -103,7 +101,7 @@ const Confirmation = () => {
           </button>
 
           <button
-            className={`w-full max-w-[500px] h-[90px] mx-auto flex flex-row justify-between items-center gap-3 rounded-md px-5 py-2 text-[14px] sm:text-[17px] ${
+            className={`w-full max-w-[500px] h-[90px] mx-auto flex flex-row justify-between items-center gap-3 rounded-md px-5 py-2 text-[14px] sm:text-[17px] 2xl:text-[20px] ${
               paymentMethod === "physical"
                 ? "bg-[#0F0E49] text-slate-100"
                 : "bg-[#fffdfe] text-slate-800"
@@ -120,7 +118,7 @@ const Confirmation = () => {
       )}
 
       {/* Navigation */}
-      <div className="w-full max-w-[700px] flex flex-row justify-between items-center text-[17px] font-[400] text-neutral-800 mt-6">
+      <div className="w-full max-w-[700px] flex flex-row justify-between items-center text-[17px] 2xl:text-[20px] font-[400] text-neutral-800 mt-6">
         <button
           className="py-1 px-4 bg-white text-neutral-500 rounded-md border-[2px] border-neutral-300 active:scale-90"
           onClick={prevStep}

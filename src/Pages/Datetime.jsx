@@ -71,7 +71,7 @@ const Datetime = () => {
       </div>
 
       {/* Navigation */}
-      <div className="w-full max-w-[700px] flex flex-row justify-between items-center text-[17px] font-[400] text-neutral-800 mt-6">
+      <div className="w-full max-w-[700px] flex flex-row justify-between items-center text-[17px] 2xl:text-[20px] font-[400] text-neutral-800 mt-6">
         <button
           className="py-1 px-4 bg-white text-neutral-500 rounded-md border-[2px] border-neutral-300 active:scale-90"
           onClick={prevStep}

@@ -12,9 +12,9 @@ const App = () => {
   return (
     <>
       <Header />
-      <main className="flex flex-col justify-center items-center py-5 text-[17px] px-3">
+      <main className="flex flex-col justify-center items-center py-5 text-[17px] 2xl:text-[20px] px-3">
         <div className="w-full max-w-[700px] mt-[140px] sm:mt-[100px]">
-          <ul className="steps text-slate-600 text-[17px] w-full">
+          <ul className="steps text-slate-600 text-[17px] 2xl:text-[20px] w-full">
             {steps?.map((step) => (
               <li
                 key={step}

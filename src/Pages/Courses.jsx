@@ -79,20 +79,20 @@ const Courses = () => {
                   course?.offerPrice === 0 ? (
                     <>
                       <del className="opacity-50 mr-1">Tk. {course?.price}</del>
-                      <span className="text-[17px] sm:text-[20px] text-green-500 font-[500]">
+                      <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
                         FREE
                       </span>
                     </>
                   ) : (
                     <>
                       <del className="opacity-50 mr-1">Tk. {course?.price}</del>
-                      <span className="text-[17px] sm:text-[20px] text-green-500 font-[500]">
+                      <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
                         Tk. {course?.offerPrice}
                       </span>
                     </>
                   )
                 ) : course?.price === 0 ? (
-                  <span className="text-[17px] sm:text-[20px] text-green-500 font-[500]">
+                  <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
                     FREE
                   </span>
                 ) : (
@@ -104,7 +104,7 @@ const Courses = () => {
         ))}
 
         {/* Navigation */}
-        <div className="w-full max-w-[700px] flex flex-row justify-end items-center text-[17px] font-[400] text-neutral-800 mt-6">
+        <div className="w-full max-w-[700px] flex flex-row justify-end items-center text-[17px] 2xl:text-[20px] font-[400] text-neutral-800 mt-6">
           <button
             className="py-1 px-4 bg-indigo-700 text-white rounded-md border-[2px] border-transparent active:scale-90 flex flex-row items-center gap-1 hover:gap-2 disabled:opacity-50 disabled:pointer-events-none"
             disabled={!selectedCourse}

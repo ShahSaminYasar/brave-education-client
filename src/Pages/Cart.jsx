@@ -24,7 +24,7 @@ const Cart = () => {
             "An error occured, please try again."}
         </p>
       ) : (
-        <div className="flex flex-row justify-between items-start text-[14px] sm:text-[17px] font-[500] w-full text-slate-800">
+        <div className="flex flex-row justify-between items-start text-[14px] sm:text-[17px] 2xl:text-[20px] font-[500] w-full text-slate-800">
           <div className="flex flex-col gap-2 justify-start items-start">
             <h3
               className={`text-indigo-700 text-[25px] sm:text-[28px] font-[500]`}
@@ -88,7 +88,7 @@ const Cart = () => {
       )}
 
       {/* Navigation */}
-      <div className="w-full max-w-[700px] flex flex-row justify-between items-center text-[17px] font-[400] text-neutral-800 mt-6">
+      <div className="w-full max-w-[700px] flex flex-row justify-between items-center text-[17px] 2xl:text-[20px] font-[400] text-neutral-800 mt-6">
         <button
           className="py-1 px-4 bg-white text-neutral-500 rounded-md border-[2px] border-neutral-300 active:scale-90"
           onClick={prevStep}
