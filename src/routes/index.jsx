@@ -7,6 +7,7 @@ import Registrations from "../Pages/Dashboard/Admin/Registrations";
 import Admin from "../Pages/Dashboard/Admin/Admin";
 import AdminCourses from "../Pages/Dashboard/Admin/AdminCourses";
 import AddCourse from "../Pages/Dashboard/Admin/AddCourse";
+import EditCourse from "../Pages/Dashboard/Admin/EditCourse";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
       {
         path: "add-course",
         element: <AddCourse />,
+      },
+      {
+        path: "edit-course/:id",
+        element: <EditCourse />,
       },
     ],
   },

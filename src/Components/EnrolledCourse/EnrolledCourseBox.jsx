@@ -1,4 +1,3 @@
-import React from "react";
 import useCourses from "../../hooks/useCourses";
 import moment from "moment";
 

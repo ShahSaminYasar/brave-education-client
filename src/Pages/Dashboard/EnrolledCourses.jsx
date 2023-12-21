@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EnrolledCourseBox from "../../Components/EnrolledCourse/EnrolledCourseBox";
 import Title from "../../Components/Title";
 import Header from "../../Components/Header";
@@ -7,7 +7,7 @@ import useSettings from "../../hooks/useSettings";
 
 const EnrolledCourses = () => {
   const enrolled = JSON.parse(localStorage.getItem("be_enrolled_courses"));
-  const {setCurrentStep} = useSettings();
+  const { setCurrentStep } = useSettings();
   const navigate = useNavigate();
 
   return (
@@ -21,6 +21,7 @@ const EnrolledCourses = () => {
               enrolled?.map((course) => (
                 <>
                   <EnrolledCourseBox
+                    key={course?.course}
                     courseId={course?.course}
                     details={course}
                   />
@@ -36,10 +37,13 @@ const EnrolledCourses = () => {
                 />
                 <p className="block text-[17px] text-center">
                   You haven&apos;t enrolled in any course/test yet.{" "}
-                  <button onClick={() => {
-                    setCurrentStep(1);
-                    return navigate("/");
-                  }} className="text-indigo-600">
+                  <button
+                    onClick={() => {
+                      setCurrentStep(1);
+                      return navigate("/");
+                    }}
+                    className="text-indigo-600"
+                  >
                     Enroll now?
                   </button>
                 </p>

@@ -38,29 +38,27 @@ const Datetime = () => {
             <p className="text-red-500 block text-center text-[16px]">
               {schedule?.error || "An error occured."}
             </p>
-          ) : schedule?.length > 0 ? (
+          ) : schedule?.times?.length > 0 ? (
             <div className="grid grid-cols-2 gap-3">
-              {schedule?.map((shift) =>
-                shift?.times?.map((time) => (
-                  <button
-                    disabled={time?.enrolled >= 15}
-                    key={time?.time}
-                    className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${
-                      time?.time === details?.schedule?.time
-                        ? "bg-indigo-700 text-slate-200"
-                        : "bg-white text-slate-800"
-                    }`}
-                    onClick={() => handleSelectTime(time?.time)}
-                  >
-                    {time?.time}{" "}
-                    {time?.enrolled >= 15 && (
-                      <span className="text-[12px] p-1 rounded-sm bg-slate-700 text-white absolute top-0 right-0 leading-[10px]">
-                        Full
-                      </span>
-                    )}
-                  </button>
-                ))
-              )}
+              {schedule?.times?.map((time) => (
+                <button
+                  disabled={time?.enrolled >= 15}
+                  key={time?.time}
+                  className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${
+                    time?.time === details?.schedule?.time
+                      ? "bg-indigo-700 text-slate-200"
+                      : "bg-white text-slate-800"
+                  }`}
+                  onClick={() => handleSelectTime(time?.time)}
+                >
+                  {time?.time}{" "}
+                  {time?.enrolled >= 15 && (
+                    <span className="text-[12px] p-1 rounded-sm bg-slate-700 text-white absolute top-0 right-0 leading-[10px]">
+                      Full
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
           ) : (
             <p className="block text-center text-[16px] text-slate-500">

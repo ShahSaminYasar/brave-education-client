@@ -1,14 +1,16 @@
-import { FaCheckDouble, FaLocationPin, FaPhone } from "react-icons/fa6";
+import { FaCheckDouble } from "react-icons/fa6";
 import { Link, Navigate } from "react-router-dom";
 import useSettings from "../hooks/useSettings";
 import useCourses from "../hooks/useCourses";
 import moment from "moment";
 import { IoLocationOutline } from "react-icons/io5";
 import { IoCallOutline } from "react-icons/io5";
+import PaymentFailedGif from "../assets/payment_failed.gif";
 
 const Checkout = () => {
   const query = new URLSearchParams(window.location.search);
   const status = query.get("status");
+  console.log(status);
 
   const { details, setDetails, setCurrentStep } = useSettings();
   const courseDetails = useCourses(details?.course);
@@ -38,9 +40,9 @@ const Checkout = () => {
     }
   }
 
-  if (!details?.uid) {
-    return <Navigate to="/" />; TODO
-  }
+  // if (!details?.uid) {
+  //   return <Navigate to="/" />;
+  // } TODO
 
   const handleRestart = () => {
     setDetails({});
@@ -52,12 +54,18 @@ const Checkout = () => {
       <section className="bg-white rounded-md px-5 py-7 text-slate-800 text-[17px] 2xl:text-[20px] font-[500] shadow-md w-full max-w-[660px] relative">
         {status !== "success" ? (
           <>
-            <p className="text-[30px] text-slate-800 font-[500] block text-center mb-5">
-              Status:{" "}
-              <span className="text-slate-900 font-[600] uppercase">
-                {status}
-              </span>
-            </p>
+            {status === "failed" ? (
+              <div className="flex flex-col gap-2 items-center text-[20px] text-center text-red-600 font-[500]">
+                <img
+                  src={PaymentFailedGif}
+                  alt="Payment Failed GIF"
+                  className="w-[200px] aspect-square rounded-full object-cover"
+                />
+                <span>Payment failed</span>
+              </div>
+            ) : (
+              ""
+            )}
             <Link
               to="/"
               className="block mx-auto w-fit py-2 px-3 border-2 border-indigo-700 rounded-md text-indigo-700"
@@ -104,21 +112,22 @@ const Checkout = () => {
                         {moment(details?.schedule?.date).format("D MMMM YYYY")}
                       </span>
                     </p>
-                    <div className="grid grid-cols-2 gap-2 items-start my-3 text-[15px] text-slate-700">
-                      <div className="grid grid-cols-6 items-center border-[1px] border-slate-200 p-2">
-                        <div className="grid col-span-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-3 text-[15px] text-slate-700">
+                      <div className="grid grid-cols-6 sm:col-span-2 items-center border-[1px] border-slate-200 p-2">
+                        <div className="grid col-span-1 justify-center">
                           <IoLocationOutline className="text-[30px]" />
                         </div>
-                        <div className="col-span-5">
-                          House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100
+                        <div className="col-span-5 text-center">
+                          House No. 05, 1st floor, Block-C (Main Road),
+                          Shahjalal Upashahar Main Road, Sylhet 3100
                         </div>
                       </div>
-                      <div className="grid grid-cols-6 items-center border-[1px] border-slate-200 p-2">
-                        <div className="grid col-span-1">
-                          <FaPhone className="text-[30px]" />
+                      <div className="h-full grid grid-cols-6 sm:col-span-1 items-center border-[1px] border-slate-200 p-2">
+                        <div className="grid col-span-1 justify-center">
+                          <IoCallOutline className="text-[30px]" />
                         </div>
-                        <div className="col-span-5">
-                          House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100
+                        <div className="col-span-5 text-center">
+                          01937-805552
                         </div>
                       </div>
                     </div>
@@ -142,8 +151,9 @@ const Checkout = () => {
                     </div>
                   </div>
                   <span
-                    className={`absolute -top-[5px] -right-[5px] text-[30px] font-[700] text-white bg-rose-900 rounded-md px-2 leading-[40px] ${courseDetails?.[0]?.offerPrice === 0 ? "hidden" : ""
-                      }`}
+                    className={`absolute -top-[5px] -right-[5px] text-[30px] font-[700] text-white bg-rose-900 rounded-md px-2 leading-[40px] ${
+                      courseDetails?.[0]?.offerPrice === 0 ? "hidden" : ""
+                    }`}
                   >
                     {details?.paid ? "PAID" : "UNPAID"}
                   </span>

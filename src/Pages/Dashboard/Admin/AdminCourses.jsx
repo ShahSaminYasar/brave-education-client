@@ -113,8 +113,11 @@ const AdminCourses = () => {
                     "Tk. " + course?.price
                   )}
                 </span>
-                <div className="grid grid-cols-2 gap-2 w-full items-center mt-3">
-                  <Link className="py-1 px-2 bg-indigo-600 text-white rounded-md w-full text-center">
+                <div className="grid grid-cols-2 gap-2 w-full items-center mt-3 font-[300] text-[16px]">
+                  <Link
+                    to={`/admin/edit-course/${course?._id}`}
+                    className="py-1 px-2 bg-indigo-700 text-white rounded-md w-full text-center"
+                  >
                     Edit
                   </Link>
                   <button

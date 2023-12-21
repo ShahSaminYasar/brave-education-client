@@ -1,20 +1,43 @@
 import toast from "react-hot-toast";
 import Title from "../../../Components/Title";
 import useAxios from "../../../hooks/useAxios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Calendar from "react-calendar";
 import moment from "moment";
 import { FaTrash } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useCourses from "../../../hooks/useCourses";
+import useSchedule from "../../../hooks/useSchedule";
 
-const AddCourse = () => {
+const EditCourse = () => {
   const axiosSecure = useAxios();
   const navigate = useNavigate();
 
-  const [adding, setAdding] = useState(false);
+  const { id } = useParams();
+  console.log(id);
+
+  const courseDetails = useCourses(id);
+  const courseSchedule = useSchedule(id);
+  console.log(courseDetails, courseSchedule);
+
+  const [updating, setUpdating] = useState(false);
   const [dateValue, setDateValue] = useState("");
   const [schedule, setSchedule] = useState([]);
+
+  useEffect(() => {
+    if (!courseSchedule?.isLoading && !courseSchedule?.error) {
+      console.log(courseSchedule?.[0]?.schedules);
+      //   setSchedule(courseSchedule?.[0]?.schedules);
+    }
+  }, [courseSchedule]);
+
+  if (courseDetails?.isLoading || courseSchedule?.isLoading)
+    return (
+      <div className="py-10 px-3 flex justify-center items-center">
+        <span className="loading loading-spinner text-indigo-700 text-[20px]"></span>
+      </div>
+    );
 
   const handleAddDate = () => {
     const check = schedule?.find((shift) => shift?.date === dateValue);
@@ -49,7 +72,7 @@ const AddCourse = () => {
 
   const handleAddCourse = async (e) => {
     e.preventDefault();
-    setAdding(true);
+    setUpdating(true);
     const form = e.target;
     const { name, duration, price, offerPrice, status } = form;
     const thumbnail = form?.thumbnail?.files[0];
@@ -70,11 +93,11 @@ const AddCourse = () => {
         thumbnail_url = uploadThumbnail?.data?.data?.display_url;
       } else {
         toast.error("Failed to upload thumbnail");
-        return setAdding(false);
+        return setUpdating(false);
       }
     } catch (error) {
       toast.error(error?.message || "Error");
-      setAdding(false);
+      setUpdating(false);
       return console.error(error);
     }
     const data = {
@@ -89,10 +112,10 @@ const AddCourse = () => {
     const response = await axiosSecure.post("/courses", { data, schedule });
     if (response?.data?.message === "success") {
       toast.success("Course published");
-      setAdding(false);
+      setUpdating(false);
       return navigate("/admin/courses");
     } else {
-      setAdding(false);
+      setUpdating(false);
       return toast.error(
         response?.data?.message || "Failed to publish course, please retry."
       );
@@ -117,6 +140,7 @@ const AddCourse = () => {
             required
             name="name"
             type="text"
+            defaultValue={courseDetails?.name}
             placeholder="Name of the course/test"
             className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
           />
@@ -132,6 +156,7 @@ const AddCourse = () => {
             required
             name="duration"
             type="number"
+            defaultValue={courseDetails?.duration}
             placeholder="Duration of the course/test (in minutes)"
             className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
           />
@@ -148,6 +173,7 @@ const AddCourse = () => {
               required
               name="price"
               type="number"
+              defaultValue={courseDetails?.price}
               placeholder="Price (0 for 'Free')"
               className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
             />
@@ -163,6 +189,7 @@ const AddCourse = () => {
               required
               name="offerPrice"
               type="number"
+              defaultValue={courseDetails?.offerPrice}
               placeholder="Set 0 for 'Free'"
               className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
             />
@@ -179,7 +206,7 @@ const AddCourse = () => {
             <select
               name="status"
               required
-              defaultValue="true"
+              defaultValue={courseDetails?.active?.toString()}
               className="select select-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
             >
               <option value="true">Active (Visible)</option>
@@ -191,13 +218,12 @@ const AddCourse = () => {
               htmlFor="thumbnail"
               className="text-[15px] text-slate-500 font-[400]"
             >
-              Thumbnail
+              Thumbnail (Don&apos;t modify to keep the previous one)
             </label>
             <input
               type="file"
               name="thumbnail"
               accept="image/*"
-              required
               className="file-input file-input-bordered border-2 border-indigo-300 file-input-md w-full bg-white"
             />
           </div>
@@ -256,9 +282,9 @@ const AddCourse = () => {
         <button
           type="submit"
           className="bg-indigo-700 text-white text-[16x] font-[400] py-2 px-3 rounded-md my-3 disabled:opacity-50"
-          disabled={adding}
+          disabled={updating}
         >
-          {adding ? (
+          {updating ? (
             <span className="loading loading-spinner text-[20px] -mb-[6px]"></span>
           ) : (
             "Add Course"
@@ -268,4 +294,4 @@ const AddCourse = () => {
     </section>
   );
 };
-export default AddCourse;
+export default EditCourse;
