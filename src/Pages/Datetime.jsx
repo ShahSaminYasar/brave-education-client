@@ -6,6 +6,7 @@ import "react-calendar/dist/Calendar.css";
 import useSettings from "../hooks/useSettings";
 import { FaArrowRight } from "react-icons/fa6";
 import useSchedule from "../hooks/useSchedule";
+import useAxios from "../hooks/useAxios";
 
 const Datetime = () => {
   const { details, setDetails, nextStep, prevStep } = useSettings();
@@ -44,11 +45,10 @@ const Datetime = () => {
                 <button
                   disabled={time?.enrolled >= 15}
                   key={time?.time}
-                  className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${
-                    time?.time === details?.schedule?.time
+                  className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${time?.time === details?.schedule?.time
                       ? "bg-indigo-700 text-slate-200"
                       : "bg-white text-slate-800"
-                  }`}
+                    }`}
                   onClick={() => handleSelectTime(time?.time)}
                 >
                   {time?.time}{" "}

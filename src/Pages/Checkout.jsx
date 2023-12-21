@@ -1,5 +1,5 @@
 import { FaCheckDouble } from "react-icons/fa6";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import useSettings from "../hooks/useSettings";
 import useCourses from "../hooks/useCourses";
 import moment from "moment";
@@ -10,6 +10,7 @@ import PaymentFailedGif from "../assets/payment_failed.gif";
 const Checkout = () => {
   const query = new URLSearchParams(window.location.search);
   const status = query.get("status");
+  const navigate = useNavigate();
   console.log(status);
 
   const { details, setDetails, setCurrentStep } = useSettings();
@@ -46,7 +47,8 @@ const Checkout = () => {
 
   const handleRestart = () => {
     setDetails({});
-    return setCurrentStep(1);
+    setCurrentStep(1);
+    return navigate("/")
   };
 
   return (

@@ -2,9 +2,12 @@ import { FaArrowRight } from "react-icons/fa6";
 import Title from "../Components/Title";
 import useSettings from "../hooks/useSettings";
 import { useEffect, useState } from "react";
+import useAxios from "../hooks/useAxios";
+import toast from "react-hot-toast";
 
 const Details = () => {
   const { details, setDetails, prevStep, nextStep } = useSettings();
+  const axiosSecure = useAxios();
 
   const [localStudentData, setLocalStudentData] = useState({});
   const [gender, setGender] = useState(localStudentData?.gender || "");
@@ -17,7 +20,7 @@ const Details = () => {
     }
   }, []);
 
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async(e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
@@ -26,7 +29,14 @@ const Details = () => {
     const data = { name, email, phone, gender };
     setDetails({ ...details, student: data });
     localStorage.setItem("be_student", JSON.stringify(data));
-    nextStep();
+    
+    const check = await axiosSecure.get(`/check-enrolled?name=${details?.name}&date=${details?.date}&phone=${details?.phone}&courseId=${details?.course}`)
+    console.log(check?.data?.message)
+    if(check?.data?.message === "eligible"){
+      nextStep();
+    } else {
+      return toast(check?.data?.message || "You already have a schedule on that day.")
+    }
   };
 
   return (

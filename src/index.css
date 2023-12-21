@@ -12,12 +12,17 @@ body {
   min-height: 100vh;
   background: linear-gradient(
       188deg,
+      #142B3C 1.07%,
+      #14153c 117.56%
+    ),
+    url(./assets/bg-graphics.jpg);
+  /* background: linear-gradient(
+      188deg,
       rgba(3, 8, 50, 0.95) 1.07%,
       rgba(87, 44, 210, 0.96) 117.56%
     ),
-    url(./assets/bg-graphics.jpg);
+    url(./assets/bg-graphics.jpg); */
   /* background: #312897; */
-  font-family: "Poppins", sans-serif;
   font-weight: 400;
   padding-bottom: 40px;
 }
@@ -33,9 +38,13 @@ body {
   color: #1b1b1b71 !important;
 }
 
+.step-primary{
+  color: white!important;
+}
+
 .step-primary::after,
 .step-primary::before {
-  background-color: #4338ca !important;
+  background-color: #E94D4E !important;
   color: white !important;
 }
 

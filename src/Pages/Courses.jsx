@@ -40,67 +40,72 @@ const Courses = () => {
       <Title>Select a course</Title>
       <section className="flex flex-col gap-5">
         {courses?.map((course) => (
-          <button
-            key={course?.name}
-            className={`w-full flex flex-row items-center gap-3 rounded-md ${
-              course?._id === selectedCourse
-                ? "bg-indigo-700 text-slate-200"
-                : "bg-[#fffdfe] text-slate-500"
-            } overflow-hidden shadow-sm border-2 border-indigo-600 hover:scale-[103%]`}
-            onClick={() => setSelectedCourse(course?._id)}
-          >
-            <img
-              src={course?.thumbnail}
-              alt="Course Thumbnail"
-              className="w-full max-w-[150px] aspect-[16/12] object-cover"
-            />
-            <div className="flex flex-col justify-center items-start text-[14px] sm:text-[15px] font-[400] w-full">
-              <h3
-                className={`${
-                  course?._id === selectedCourse
-                    ? "text-slate-200"
-                    : "text-indigo-700"
-                } text-[20px] sm:text-[25px] font-[500] text-left`}
-              >
-                {course?.name}
-              </h3>
-              <span>
-                Duration:{" "}
-                {course?.duration >= 60
-                  ? parseInt(course?.duration / 60) +
+          <div style={{
+            background: "rgb(233,77,78)",
+            background: "linear-gradient(90deg, rgba(233,77,78,1) 0%, rgba(45,34,168,1) 71%)",
+            padding: "2px"
+          }}
+          className="rounded-md overflow-hidden">
+            <button
+              key={course?.name}
+              className={`w-full flex flex-row items-center gap-3 rounded-md overflow-hidden ${course?._id === selectedCourse
+                  ? "bg-indigo-700 text-slate-200"
+                  : "bg-[#fffdfe] text-slate-500"
+                } overflow-hidden shadow-sm`}
+              onClick={() => setSelectedCourse(course?._id)}
+            >
+              <img
+                src={course?.thumbnail}
+                alt="Course Thumbnail"
+                className="w-full max-w-[150px] aspect-[16/12] object-cover"
+              />
+              <div className="flex flex-col justify-center items-start text-[14px] sm:text-[15px] font-[400] w-full">
+                <h3
+                  className={`${course?._id === selectedCourse
+                      ? "text-slate-200"
+                      : "text-indigo-700"
+                    } text-[20px] sm:text-[25px] font-[500] text-left`}
+                >
+                  {course?.name}
+                </h3>
+                <span>
+                  Duration:{" "}
+                  {course?.duration >= 60
+                    ? parseInt(course?.duration / 60) +
                     "H " +
                     (course?.duration % 60 === 0
                       ? ""
                       : (course?.duration % 60) + "M")
-                  : course?.duration + "M"}
-              </span>
-              <span>
-                {course?.offerPrice < course?.price ? (
-                  course?.offerPrice === 0 ? (
-                    <>
-                      <del className="opacity-50 mr-1">Tk. {course?.price}</del>
-                      <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
-                        FREE
-                      </span>
-                    </>
+                    : course?.duration + "M"}
+                </span>
+                <span>
+                  {course?.offerPrice < course?.price ? (
+                    course?.offerPrice === 0 ? (
+                      <>
+                        <del className="opacity-50 mr-1">Tk. {course?.price}</del>
+                        <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
+                          FREE
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <del className="opacity-50 mr-1">Tk. {course?.price}</del>
+                        <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
+                          Tk. {course?.offerPrice}
+                        </span>
+                      </>
+                    )
+                  ) : course?.price === 0 ? (
+                    <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
+                      FREE
+                    </span>
                   ) : (
-                    <>
-                      <del className="opacity-50 mr-1">Tk. {course?.price}</del>
-                      <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
-                        Tk. {course?.offerPrice}
-                      </span>
-                    </>
-                  )
-                ) : course?.price === 0 ? (
-                  <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
-                    FREE
-                  </span>
-                ) : (
-                  "Tk. " + course?.price
-                )}
-              </span>
-            </div>
-          </button>
+                    "Tk. " + course?.price
+                  )}
+                </span>
+              </div>
+            </button>
+          </div>
         ))}
 
         {/* Navigation */}

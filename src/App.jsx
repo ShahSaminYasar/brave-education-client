@@ -20,7 +20,7 @@ const App = () => {
                 key={step}
                 className={`step capitalize ${
                   steps?.indexOf(step) + 1 <= currentStep
-                    ? "step-primary text-indigo-700"
+                    ? "step-primary text-[#E94D4E]"
                     : ""
                 }`}
               >
