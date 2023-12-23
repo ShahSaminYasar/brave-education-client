@@ -4,13 +4,22 @@ import useCourses from "../../../hooks/useCourses";
 import useSchedule from "../../../hooks/useSchedule";
 import moment from "moment";
 import toast from "react-hot-toast";
+import useAxios from "../../../hooks/useAxios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AddStudent = () => {
+  const axiosSecure = useAxios();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   //   States
   const [course, setCourse] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [batch, setBatch] = useState("");
+  const [adding, setAdding] = useState(false);
 
   const courses = useCourses();
   const schedule = useSchedule(course);
@@ -29,7 +38,9 @@ const AddStudent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAdding(true);
     if (date === "" && time === "" && !batch) {
+      setAdding(false);
       return toast("Please select a batch/schedule.");
     }
     const form = e.target;
@@ -48,7 +59,28 @@ const AddStudent = () => {
     } else {
       data.batch = parseInt(batch);
     }
-    console.log(data);
+    try {
+      const response = await axiosSecure.post("register-student", { data });
+      if (response?.data?.message === "success") {
+        setAdding(false);
+        Swal.fire({
+          title: `UID: ${response?.data?.uid}`,
+          text: `${data?.name} has been admitted.`,
+          icon: "success",
+        }).then(() => {
+          queryClient.invalidateQueries(["getRegistrations"]);
+          return navigate("/admin/registrations");
+        });
+      } else {
+        setAdding(false);
+        return toast.error(
+          response?.data?.message || "An error occured, please retry."
+        );
+      }
+    } catch (error) {
+      setAdding(false);
+      return toast.error(error?.message || "An error occured, please retry.");
+    }
   };
 
   return (
@@ -231,8 +263,9 @@ const AddStudent = () => {
         <button
           type="submit"
           className="btn bg-indigo-700 text-white text-[16px] mt-5"
+          disabled={adding}
         >
-          Admit Student
+          {adding ? "Adding..." : "Admit Student"}
         </button>
       </form>
     </section>
