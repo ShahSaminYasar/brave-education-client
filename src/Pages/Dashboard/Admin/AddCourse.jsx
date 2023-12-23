@@ -59,8 +59,9 @@ const AddCourse = () => {
     let capacity = 15;
     let enrolled = 0;
     let schedule = [];
+    let features = "";
     let duration = "";
-    let batchObject = { id, name, capacity, enrolled, schedule, duration };
+    let batchObject = { id, name, capacity, enrolled, schedule, duration, features };
     setBatches([...batches, batchObject]);
   };
 
@@ -78,7 +79,7 @@ const AddCourse = () => {
       batch?.id === focusedBatch?.id ? focusedBatch : batch
     );
     setBatches(updatedBatchesArray);
-    console.log(updatedBatchesArray);
+    // console.log(updatedBatchesArray);
   };
 
   const handleAddCourse = async (e) => {
@@ -522,6 +523,28 @@ const AddCourse = () => {
                         }
                         className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
                       />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="batch_features"
+                        className="text-[15px] text-slate-500 font-[400]"
+                      >
+                        Features
+                      </label>
+                      <textarea
+                        required
+                        name="batch_features"
+                        type="text"
+                        value={focusedBatch?.features}
+                        placeholder="Feature = value"
+                        onChange={(e) =>
+                          setFocusedBatch({
+                            ...focusedBatch,
+                            features: e.target.value,
+                          })
+                        }
+                        className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6] min-h-[150px] px-4 py-2"
+                      ></textarea>
                     </div>
                     <div className="flex flex-row gap-1 flex-wrap justify-end">
                       <button

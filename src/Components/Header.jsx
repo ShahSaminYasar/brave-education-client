@@ -28,7 +28,7 @@ const Header = () => {
   return (
     <>
       <header
-        className={`w-full bg-slate-100 backdrop-blur-sm bg-opacity-100 fixed top-0 left-0 z-[9999] shadow-md border-b-[3px] border-b-[#E94D4E] hidden sm:block`}
+        className={`w-full bg-white backdrop-blur-sm bg-opacity-100 fixed top-0 left-0 z-[9999] shadow-md border-b-[3px] border-b-[#E94D4E] hidden sm:block`}
       >
         <div className="w-full max-w-[960px] mx-auto flex flex-row justify-between items-center px-[12px] gap-3 text-[17px] 2xl:text-[20px] font-[600] text-[#E94D4E]">
           <span className="flex flex-row gap-1 items-center">
