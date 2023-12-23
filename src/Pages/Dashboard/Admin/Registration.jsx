@@ -1,11 +1,13 @@
 import moment from "moment";
 import useCourses from "../../../hooks/useCourses";
+import useBatch from "../../../hooks/useBatch";
 
 const Registration = ({ registration }) => {
   const courseDetails = useCourses(registration?.course);
+  const batchDetails = useBatch(courseDetails?.[0]?._id, registration?.batch);
 
   return (
-    <tr className="even:bg-slate-100 border-b-slate-200">
+    <tr className="even:bg-slate-100 border-b-slate-200 font-[400]">
       <td>
         <div className="flex flex-col gap-1">
           <span>
@@ -34,16 +36,25 @@ const Registration = ({ registration }) => {
               </span>
             )}
           </span>
-          <span>
-            Schedule:{" "}
-            <span className="font-[600] text-indigo-900">
-              {registration?.time}
+          {registration?.batch ? (
+            <span>
+              Batch:{" "}
+              <span className="font-[600] text-indigo-900">
+                {batchDetails?.name}
+              </span>
             </span>
-            ,{" "}
-            <span className="font-[600] text-indigo-900">
-              {moment(registration?.date).format("D MMM YYYY")}
+          ) : (
+            <span>
+              Schedule:{" "}
+              <span className="font-[600] text-indigo-900">
+                {registration?.time}
+              </span>
+              ,{" "}
+              <span className="font-[600] text-indigo-900">
+                {moment(registration?.date).format("D MMM YYYY")}
+              </span>
             </span>
-          </span>
+          )}
           <span>
             Registered on:
             <span className="font-[600]">

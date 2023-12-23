@@ -7,14 +7,20 @@ import Calendar from "react-calendar";
 import moment from "moment";
 import { FaTrash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AddCourse = () => {
   const axiosSecure = useAxios();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [adding, setAdding] = useState(false);
   const [dateValue, setDateValue] = useState("");
   const [schedule, setSchedule] = useState([]);
+  const [serviceType, setServiceType] = useState("test");
+  const [batches, setBatches] = useState([]);
+  const [selectedBatch, setSelectedBatch] = useState(null);
+  const [focusedBatch, setFocusedBatch] = useState(null);
 
   const handleAddDate = () => {
     const check = schedule?.find((shift) => shift?.date === dateValue);
@@ -47,6 +53,34 @@ const AddCourse = () => {
     setSchedule(updatedSchedule);
   };
 
+  const handleAddBatch = () => {
+    let id = Date.now();
+    let name = `Batch ${batches?.length + 1}`;
+    let capacity = 15;
+    let enrolled = 0;
+    let schedule = [];
+    let duration = "";
+    let batchObject = { id, name, capacity, enrolled, schedule, duration };
+    setBatches([...batches, batchObject]);
+  };
+
+  const handleRemoveBatch = () => {
+    let updatedBatchesArray = batches.filter(
+      (batch) => batch?.id !== focusedBatch?.id
+    );
+    setBatches(updatedBatchesArray);
+    setFocusedBatch({});
+    setSelectedBatch(0);
+  };
+
+  const handleUpdateBatch = () => {
+    let updatedBatchesArray = batches?.map((batch) =>
+      batch?.id === focusedBatch?.id ? focusedBatch : batch
+    );
+    setBatches(updatedBatchesArray);
+    console.log(updatedBatchesArray);
+  };
+
   const handleAddCourse = async (e) => {
     e.preventDefault();
     setAdding(true);
@@ -77,24 +111,50 @@ const AddCourse = () => {
       setAdding(false);
       return console.error(error);
     }
-    const data = {
-      name: name?.value,
-      duration: parseInt(duration?.value),
-      price: parseInt(price?.value),
-      offerPrice: parseInt(offerPrice?.value),
-      active: Boolean(status?.value),
-      thumbnail: thumbnail_url,
-    };
-    // console.log("DATA: ", data, "SCHEDULE: ", schedule);
-    const response = await axiosSecure.post("/courses", { data, schedule });
-    if (response?.data?.message === "success") {
-      toast.success("Course published");
-      setAdding(false);
-      return navigate("/admin/courses");
+    let data;
+    if (serviceType === "test") {
+      data = {
+        name: name?.value,
+        type: serviceType,
+        duration: parseInt(duration?.value),
+        price: parseInt(price?.value),
+        offerPrice: parseInt(offerPrice?.value),
+        active: Boolean(status?.value),
+        thumbnail: thumbnail_url,
+        schedule,
+      };
+    } else if (serviceType === "course") {
+      data = {
+        name: name?.value,
+        type: serviceType,
+        duration: parseInt(duration?.value),
+        price: parseInt(price?.value),
+        offerPrice: parseInt(offerPrice?.value),
+        active: Boolean(status?.value),
+        thumbnail: thumbnail_url,
+        batches,
+      };
     } else {
       setAdding(false);
+      return;
+    }
+    try {
+      const response = await axiosSecure.post("/courses", { data });
+      if (response?.data?.message === "success") {
+        toast.success("Course published");
+        setAdding(false);
+        queryClient.invalidateQueries(["getCourses"]);
+        return navigate("/admin/courses");
+      } else {
+        setAdding(false);
+        return toast.error(
+          response?.data?.message || "Failed to publish course, please retry."
+        );
+      }
+    } catch (error) {
+      setAdding(false);
       return toast.error(
-        response?.data?.message || "Failed to publish course, please retry."
+        error?.message || "Failed to publish course, please retry."
       );
     }
   };
@@ -188,71 +248,303 @@ const AddCourse = () => {
           </div>
           <div>
             <label
-              htmlFor="thumbnail"
+              htmlFor="type"
               className="text-[15px] text-slate-500 font-[400]"
             >
-              Thumbnail
+              Type
+            </label>
+            <select
+              name="type"
+              onChange={(e) => setServiceType(e.target.value)}
+              value={serviceType}
+              required
+              className="select select-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
+            >
+              <option value="test">Test</option>
+              <option value="course">Course</option>
+            </select>
+          </div>
+        </div>
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-center w-full">
+          <div>
+            <label
+              htmlFor="capacity"
+              className="text-[15px] text-slate-500 font-[400]"
+            >
+              Capacity
             </label>
             <input
-              type="file"
-              name="thumbnail"
-              accept="image/*"
               required
-              className="file-input file-input-bordered border-2 border-indigo-300 file-input-md w-full bg-white"
+              name="capacity"
+              type="number"
+              placeholder="Seat Capacity"
+              className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
             />
           </div>
-        </div>
+          <div>
+            <label
+              htmlFor="type"
+              className="text-[15px] text-slate-500 font-[400]"
+            >
+              Enrolled
+            </label>
+            <input
+              required
+              name="enrolled"
+              type="number"
+              min={0}
+              placeholder="Total enrolled"
+              className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
+            />
+          </div>
+        </div> */}
         <div>
           <label
-            htmlFor="schedule"
+            htmlFor="thumbnail"
             className="text-[15px] text-slate-500 font-[400]"
           >
-            Schedule
+            Thumbnail
           </label>
-          {schedule?.map((date) => (
-            <div
-              key={date?.date}
-              className="flex flex-row justify-end text-[15px] text-slate-800 mb-1"
+          <input
+            type="file"
+            name="thumbnail"
+            accept="image/*"
+            required
+            className="file-input file-input-bordered border-2 border-indigo-300 file-input-md w-full bg-white"
+          />
+        </div>
+        {serviceType === "test" ? (
+          <div>
+            <label
+              htmlFor="schedule"
+              className="text-[15px] text-slate-500 font-[400]"
             >
-              <div className="w-full flex items-center flex-row border-[1px] border-indigo-200 rounded-l-md overflow-hidden">
-                <span className="bg-indigo-500 p-2 text-white w-[140px] text-center">
-                  {date?.date}
-                </span>
-                <input
-                  type="text"
-                  onBlur={(e) =>
-                    handleAddTime(schedule.indexOf(date), e.target.value)
-                  }
-                  className="bg-white p-2 w-full border-none outline-none"
-                  placeholder="00:00AM, 10:30AM, 12:00PM, 06:45PM..."
-                />
+              Schedule
+            </label>
+            {schedule?.map((date) => (
+              <div
+                key={date?.date}
+                className="flex flex-row justify-end text-[15px] text-slate-800 mb-1"
+              >
+                <div className="w-full flex items-center flex-row border-[1px] border-indigo-200 rounded-l-md overflow-hidden">
+                  <span className="bg-indigo-500 p-2 text-white w-[140px] text-center">
+                    {date?.date}
+                  </span>
+                  <input
+                    type="text"
+                    onBlur={(e) =>
+                      handleAddTime(schedule.indexOf(date), e.target.value)
+                    }
+                    className="bg-white p-2 w-full border-none outline-none"
+                    placeholder="00:00AM, 10:30AM, 12:00PM, 06:45PM..."
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveDate(schedule.indexOf(date))}
+                  className="text-[17px] text-white bg-rose-500 rounded-sm overflow-hidden px-2"
+                >
+                  <FaTrash />
+                </button>
               </div>
+            ))}
+            <div className="flex flex-col items-end gap-2 max-w-[350px] mx-auto mt-3">
+              <Calendar
+                minDate={new Date()}
+                value={dateValue}
+                onChange={(value) =>
+                  setDateValue(moment(value).format("YYYY-MM-DD"))
+                }
+              />
               <button
                 type="button"
-                onClick={() => handleRemoveDate(schedule.indexOf(date))}
-                className="text-[17px] text-white bg-rose-500 rounded-sm overflow-hidden px-2"
+                onClick={handleAddDate}
+                className="btn btn-sm bg-blue-950 text-white font-[300] text"
               >
-                <FaTrash />
+                Add Date
               </button>
             </div>
-          ))}
-          <div className="flex flex-col items-end gap-2 max-w-[350px] mx-auto mt-3">
-            <Calendar
-              minDate={new Date()}
-              value={dateValue}
-              onChange={(value) =>
-                setDateValue(moment(value).format("YYYY-MM-DD"))
-              }
-            />
-            <button
-              type="button"
-              onClick={handleAddDate}
-              className="btn btn-sm bg-blue-950 text-white font-[300] text"
-            >
-              Add Date
-            </button>
           </div>
-        </div>
+        ) : (
+          <div className="">
+            <label
+              htmlFor="batches"
+              className="text-[15px] text-slate-500 font-[400]"
+            >
+              Course Batches
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="w-full sm:col-span-1 flex flex-row gap-1 flex-wrap h-fit">
+                {batches?.length > 0
+                  ? batches?.map((batch) => (
+                      <button
+                        key={batch?.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedBatch(batch?.id);
+                          setFocusedBatch(
+                            batches?.find((object) => object?.id === batch?.id)
+                          );
+                        }}
+                        className={`text-[14px] font-[500] p-1 border-2 border-indigo-900 shadow-md rounded-md ${
+                          batch?.id === selectedBatch
+                            ? "bg-indigo-900 text-white"
+                            : "bg-white text-indigo-900"
+                        }`}
+                      >
+                        {batch.name}
+                      </button>
+                    ))
+                  : "Please add a batch"}
+                <button
+                  type="button"
+                  onClick={handleAddBatch}
+                  className="btn btn-sm bg-blue-950 text-white font-[300] text block w-fit mr-auto mb-2 sm:w-full my-3 text-center"
+                >
+                  Add a batch
+                </button>
+              </div>
+              <div className="w-full sm:col-span-2 sm:-mt-6">
+                {selectedBatch > 0 && (
+                  <div className="flex flex-col gap-2">
+                    <div>
+                      <label
+                        htmlFor="batch_name"
+                        className="text-[15px] text-slate-500 font-[400]"
+                      >
+                        Batch Name
+                      </label>
+                      <input
+                        required
+                        name="batch_name"
+                        type="text"
+                        value={focusedBatch?.name}
+                        onChange={(e) =>
+                          setFocusedBatch({
+                            ...focusedBatch,
+                            name: e.target.value,
+                          })
+                        }
+                        placeholder="Name of the batch"
+                        className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="batch_capacity"
+                        className="text-[15px] text-slate-500 font-[400]"
+                      >
+                        Capacity
+                      </label>
+                      <input
+                        required
+                        name="batch_capacity"
+                        type="number"
+                        min={1}
+                        value={focusedBatch?.capacity}
+                        onChange={(e) => {
+                          if (parseInt(e.target.value) >= 0) {
+                            setFocusedBatch({
+                              ...focusedBatch,
+                              capacity: parseInt(e.target.value),
+                            });
+                          }
+                        }}
+                        placeholder="Max capacity of the batch"
+                        className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="batch_enrolled"
+                        className="text-[15px] text-slate-500 font-[400]"
+                      >
+                        Enrolled
+                      </label>
+                      <input
+                        required
+                        name="batch_enrolled"
+                        type="number"
+                        min={0}
+                        value={focusedBatch?.enrolled}
+                        onChange={(e) => {
+                          if (parseInt(e.target.value) >= 0) {
+                            setFocusedBatch({
+                              ...focusedBatch,
+                              enrolled: parseInt(e.target.value),
+                            });
+                          }
+                        }}
+                        placeholder="Enrolled students"
+                        className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="batch_duration"
+                        className="text-[15px] text-slate-500 font-[400]"
+                      >
+                        Batch Duration
+                      </label>
+                      <input
+                        required
+                        name="batch_duration"
+                        type="text"
+                        value={focusedBatch?.duration}
+                        placeholder="Eg. 2 Months 15 Days"
+                        onChange={(e) =>
+                          setFocusedBatch({
+                            ...focusedBatch,
+                            duration: e.target.value,
+                          })
+                        }
+                        className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="batch_duration"
+                        className="text-[15px] text-slate-500 font-[400]"
+                      >
+                        Batch Schedule
+                      </label>
+                      <input
+                        required
+                        name="batch_schedule"
+                        type="text"
+                        value={focusedBatch?.schedule}
+                        placeholder="Mon - 4pm to 5:30pm, Wed - 9am..."
+                        onChange={(e) =>
+                          setFocusedBatch({
+                            ...focusedBatch,
+                            schedule: e.target.value,
+                          })
+                        }
+                        className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
+                      />
+                    </div>
+                    <div className="flex flex-row gap-1 flex-wrap justify-end">
+                      <button
+                        type="button"
+                        onClick={handleRemoveBatch}
+                        className="btn btn-sm bg-red-600 text-white font-[300] text block w-fit my-0"
+                      >
+                        Remove
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleUpdateBatch}
+                        className="btn btn-sm bg-blue-950 text-white font-[300] text block w-fit my-0"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
         <button
           type="submit"
           className="bg-indigo-700 text-white text-[16x] font-[400] py-2 px-3 rounded-md my-3 disabled:opacity-50"

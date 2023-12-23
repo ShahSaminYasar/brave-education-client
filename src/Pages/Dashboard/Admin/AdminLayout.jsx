@@ -64,6 +64,16 @@ const AdminLayout = () => {
                 >
                   Add Course
                 </NavLink>
+                <NavLink
+                  to="/admin/register-student"
+                  className={({ isActive }) =>
+                    `block w-full py-3 border-b-[2px] border-b-indigo-100 hover:text-rose-600 ${
+                      isActive ? "text-rose-600" : "text-indigo-700"
+                    }`
+                  }
+                >
+                  Register Student
+                </NavLink>
               </ul>
             </div>
           </div>

@@ -1,171 +1,224 @@
 import { FaCheckDouble } from "react-icons/fa6";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  ScrollRestoration,
+  useNavigate,
+} from "react-router-dom";
 import useSettings from "../hooks/useSettings";
 import useCourses from "../hooks/useCourses";
 import moment from "moment";
 import { IoLocationOutline } from "react-icons/io5";
 import { IoCallOutline } from "react-icons/io5";
 import PaymentFailedGif from "../assets/payment_failed.gif";
+import { useState, useEffect } from "react";
 
 const Checkout = () => {
+  const navigate = useNavigate();
+  const { details, setDetails, setCurrentStep } = useSettings();
+
   const query = new URLSearchParams(window.location.search);
   const status = query.get("status");
-  const navigate = useNavigate();
-  console.log(status);
+  const uid = details?.uid || query.get("uid");
+  const paid = Boolean(details?.paid) || Boolean(query.get("paid"));
 
-  const { details, setDetails, setCurrentStep } = useSettings();
-  const courseDetails = useCourses(details?.course);
+  const [loading, setLoading] = useState(true);
+  const [registrationDetails, setRegistrationDetails] = useState(null);
 
-  if (details?.uid) {
-    const enrolledCourses = JSON.parse(
-      localStorage.getItem("be_enrolled_courses")
-    );
-    const check = enrolledCourses?.filter(
-      (enrolledCourse) => enrolledCourse?.uid === details?.uid
-    );
-    if (!check || check?.length === 0) {
-      let newEnrolledArray = [];
-      if (enrolledCourses) {
-        newEnrolledArray = [...enrolledCourses, details];
-        localStorage.setItem(
-          "be_enrolled_courses",
-          JSON.stringify(newEnrolledArray)
+  useEffect(() => {
+    setCurrentStep(1);
+  }, [setCurrentStep]);
+
+  useEffect(() => {
+    const fetchRegistrationDetails = async () => {
+      if (details.uid) {
+        // console.log("RD set from state");
+        setRegistrationDetails(details);
+        setLoading(false);
+      } else if (JSON.parse(sessionStorage.getItem("be_details_temp"))) {
+        // console.log("RD set from SS");
+        const tempDetails = JSON.parse(
+          sessionStorage.getItem("be_details_temp")
         );
+        setRegistrationDetails({
+          ...tempDetails,
+          paid,
+          uid,
+        });
+        sessionStorage.removeItem("be_details_temp");
+        console.log("Operation DOne");
+        setLoading(false);
       } else {
-        newEnrolledArray = [details];
+        // console.log("No RD");
+        setLoading(false);
+      }
+    };
+
+    fetchRegistrationDetails();
+  }, [details, paid, uid]);
+
+  const enrolledCourses = JSON.parse(
+    localStorage.getItem("be_enrolled_courses")
+  );
+
+  useEffect(() => {
+    if (uid && registrationDetails) {
+      const check = enrolledCourses?.some(
+        (enrolledCourse) => enrolledCourse?.uid === uid
+      );
+
+      if (!check) {
+        const newEnrolledArray = enrolledCourses
+          ? [...enrolledCourses, registrationDetails]
+          : [registrationDetails];
+
         localStorage.setItem(
           "be_enrolled_courses",
           JSON.stringify(newEnrolledArray)
         );
       }
     }
-  }
+  }, [uid, enrolledCourses, registrationDetails]);
 
-  // if (!details?.uid) {
-  //   return <Navigate to="/" />;
-  // } TODO
+  const courseDetails = useCourses(registrationDetails?.course);
+
+  if (!loading && !registrationDetails && status === "successful") {
+    return <Navigate to="/" />;
+  }
 
   const handleRestart = () => {
     setDetails({});
     setCurrentStep(1);
-    return navigate("/")
+    return navigate("/");
   };
 
+  // console.log(registrationDetails);
+
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4">
-      <section className="bg-white rounded-md px-5 py-7 text-slate-800 text-[17px] 2xl:text-[20px] font-[500] shadow-md w-full max-w-[660px] relative">
-        {status !== "success" ? (
-          <>
-            {status === "failed" ? (
-              <div className="flex flex-col gap-2 items-center text-[20px] text-center text-red-600 font-[500]">
+    <>
+      <ScrollRestoration />
+      <main className="min-h-screen flex flex-col items-center justify-center p-4">
+        <section className="bg-white rounded-md px-5 py-7 text-slate-800 text-[17px] 2xl:text-[20px] font-[500] shadow-md w-full max-w-[660px] relative">
+          {status !== "successful" ? (
+            <>
+              <div className="flex flex-col gap-2 items-center text-[23px] text-center text-red-600 font-[500]">
                 <img
                   src={PaymentFailedGif}
                   alt="Payment Failed GIF"
-                  className="w-[200px] aspect-square rounded-full object-cover"
+                  className="w-[200px] aspect-square rounded-full object-cover shadow-md"
                 />
-                <span>Payment failed</span>
+                <span>Payment {status}</span>
               </div>
-            ) : (
-              ""
-            )}
-            <Link
-              to="/"
-              className="block mx-auto w-fit py-2 px-3 border-2 border-indigo-700 rounded-md text-indigo-700"
-            >
-              Retry?
-            </Link>
-          </>
-        ) : (
-          <>
-            <div className="py-4 px-2">
-              {courseDetails?.[0]?.isLoading ? (
-                <span className="loader loader-spinner loader-sm"></span>
-              ) : courseDetails?.[0]?.error ? (
-                <p className="block text-red-500 text-center mb-4">
-                  {courseDetails?.[0]?.error ||
-                    "An error occured, please retry."}
-                </p>
-              ) : (
-                <>
-                  <FaCheckDouble className="text-[70px] text-green-500 block mx-auto mb-5" />
-                  <p className="text-[20px] text-slate-800 font-[500] block text-center mb-2">
-                    You have successfully registered in the course <br />
-                    <span className="font-[600]">
-                      {courseDetails?.[0]?.name}
-                    </span>
+              <Link
+                to="/"
+                className="block mt-4 mx-auto w-fit py-2 px-3 border-2 border-indigo-700 rounded-md text-indigo-700"
+              >
+                Retry?
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="py-4 px-2">
+                {courseDetails?.isLoading ? (
+                  <span className="loader loader-spinner loader-sm"></span>
+                ) : courseDetails?.error ? (
+                  <p className="block text-red-500 text-center mb-4">
+                    {courseDetails?.error || "An error occured, please retry."}
                   </p>
-                  <p className="block text-center mb-2">
-                    Your ID:{" "}
-                    <span className="font-[600] text-[22px] text-indigo-800">
-                      {details?.uid}
-                    </span>
-                    <span className="text-[12px] text-slate-600 font-[300] italic -mt-[6px] block">
-                      (Please save it for future use)
-                    </span>
-                  </p>
-                  <div className="flex flex-col gap-2 justify-start items-start">
-                    <p className="block text-center w-full">
-                      We expect your presence at{" "}
-                      <span className="text-indigo-700 font-[600]">
-                        {details?.schedule?.time}
-                      </span>{" "}
-                      on{" "}
-                      <span className="text-indigo-800 font-[600]">
-                        {moment(details?.schedule?.date).format("D MMMM YYYY")}
+                ) : (
+                  <>
+                    <FaCheckDouble className="text-[70px] text-green-500 block mx-auto mb-5" />
+                    <p className="text-[20px] text-slate-800 font-[500] block text-center mb-2">
+                      You have successfully registered in the course <br />
+                      <span className="font-[600]">
+                        {courseDetails?.[0]?.name}
                       </span>
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-3 text-[15px] text-slate-700">
-                      <div className="grid grid-cols-6 sm:col-span-2 items-center border-[1px] border-slate-200 p-2">
-                        <div className="grid col-span-1 justify-center">
-                          <IoLocationOutline className="text-[30px]" />
+                    <p className="block text-center mb-2">
+                      Your ID:{" "}
+                      <span className="font-[600] text-[22px] text-indigo-800">
+                        {uid}
+                      </span>
+                      <span className="text-[12px] text-slate-600 font-[300] italic -mt-[6px] block">
+                        (Please save it for future use)
+                      </span>
+                    </p>
+                    <div className="flex flex-col gap-2 justify-start items-start">
+                      {registrationDetails?.schedule ? (
+                        <p className="block text-center w-full">
+                          We expect your presence at{" "}
+                          <span className="text-indigo-700 font-[600]">
+                            {registrationDetails?.schedule?.time}
+                          </span>{" "}
+                          on{" "}
+                          <span className="text-indigo-800 font-[600]">
+                            {moment(registrationDetails?.schedule?.date).format(
+                              "D MMMM YYYY"
+                            )}
+                          </span>
+                        </p>
+                      ) : (
+                        <p className="block text-center w-full bg-slate-50 rounded-md p-2 shadow-sm border-2 border-white text-indigo-700">
+                          Routine: {registrationDetails?.batchSchedule}
+                        </p>
+                      )}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-3 text-[15px] text-slate-700">
+                        <div className="grid grid-cols-6 sm:col-span-2 items-center border-[1px] border-slate-200 p-2">
+                          <div className="grid col-span-1 justify-center">
+                            <IoLocationOutline className="text-[30px]" />
+                          </div>
+                          <div className="col-span-5 text-center">
+                            House No. 05, 1st floor, Block-C (Main Road),
+                            Shahjalal Upashahar Main Road, Sylhet 3100
+                          </div>
                         </div>
-                        <div className="col-span-5 text-center">
-                          House No. 05, 1st floor, Block-C (Main Road),
-                          Shahjalal Upashahar Main Road, Sylhet 3100
+                        <div className="h-full grid grid-cols-6 sm:col-span-1 items-center border-[1px] border-slate-200 p-2">
+                          <div className="grid col-span-1 justify-center">
+                            <IoCallOutline className="text-[30px]" />
+                          </div>
+                          <div className="col-span-5 text-center">
+                            01937-805552
+                          </div>
                         </div>
                       </div>
-                      <div className="h-full grid grid-cols-6 sm:col-span-1 items-center border-[1px] border-slate-200 p-2">
-                        <div className="grid col-span-1 justify-center">
-                          <IoCallOutline className="text-[30px]" />
-                        </div>
-                        <div className="col-span-5 text-center">
-                          01937-805552
-                        </div>
+                      {/* <div className="divider my-[0px]"></div> */}
+                      <div className="grid sm:flex sm:flex-row gap-2 sm:gap-3 items-center justify-center w-full mt-5 text-center">
+                        <button className="rounded-md py-2 px-3 text-[16px] bg-rose-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none">
+                          Download Invoice
+                        </button>
+                        <button
+                          onClick={handleRestart}
+                          className="rounded-md py-2 px-3 text-[16px] bg-indigo-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none"
+                        >
+                          Register another course
+                        </button>
+                        <Link
+                          to="/enrolled-courses"
+                          className="rounded-md py-2 px-3 text-[16px] bg-emerald-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none"
+                        >
+                          Account
+                        </Link>
                       </div>
                     </div>
-                    {/* <div className="divider my-[0px]"></div> */}
-                    <div className="grid sm:flex sm:flex-row gap-2 sm:gap-3 items-center justify-center w-full mt-5 text-center">
-                      <button className="rounded-md py-2 px-3 text-[16px] bg-rose-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none">
-                        Download Invoice
-                      </button>
-                      <button
-                        onClick={handleRestart}
-                        className="rounded-md py-2 px-3 text-[16px] bg-indigo-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none"
-                      >
-                        Register another course
-                      </button>
-                      <Link
-                        to="/enrolled-courses"
-                        className="rounded-md py-2 px-3 text-[16px] bg-emerald-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none"
-                      >
-                        Account
-                      </Link>
-                    </div>
-                  </div>
-                  <span
-                    className={`absolute -top-[5px] -right-[5px] text-[30px] font-[700] text-white bg-rose-900 rounded-md px-2 leading-[40px] ${
-                      courseDetails?.[0]?.offerPrice === 0 ? "hidden" : ""
-                    }`}
-                  >
-                    {details?.paid ? "PAID" : "UNPAID"}
-                  </span>
-                </>
-              )}
-            </div>
-          </>
-        )}
-      </section>
-    </main>
+                    <span
+                      className={`absolute -top-[5px] -right-[5px] text-[30px] font-[700] text-white ${
+                        registrationDetails?.paid
+                          ? "bg-teal-900"
+                          : "bg-rose-900"
+                      } rounded-md px-2 leading-[40px] ${
+                        courseDetails?.[0]?.offerPrice === 0 ? "hidden" : ""
+                      }`}
+                    >
+                      {registrationDetails?.paid ? "PAID" : "UNPAID"}
+                    </span>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+        </section>
+      </main>
+    </>
   );
 };
 export default Checkout;

@@ -19,14 +19,13 @@ const EnrolledCourses = () => {
           <div className="flex flex-col gap-3">
             {enrolled?.length > 0 ? (
               enrolled?.map((course) => (
-                <>
+                <div key={course?.uid}>
                   <EnrolledCourseBox
-                    key={course?.course}
                     courseId={course?.course}
                     details={course}
                   />
                   <div className="divider my-[0px]"></div>
-                </>
+                </div>
               ))
             ) : (
               <>

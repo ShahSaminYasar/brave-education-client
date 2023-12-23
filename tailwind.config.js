@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {},
     fontFamily: {
-      sans: ['"Inter var", sans-serif'],
-    }
+      sans: ['"Space Grotesk", sans-serif'],
+    },
   },
   plugins: [require("daisyui")],
 };

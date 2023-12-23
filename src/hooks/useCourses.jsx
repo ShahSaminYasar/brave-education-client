@@ -14,7 +14,7 @@ const useCourses = (id, all) => {
   }
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["getCourses", id],
+    queryKey: ["getCourses", id, all],
     queryFn: () => axios.get(url),
   });
 
