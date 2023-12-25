@@ -12,10 +12,12 @@ import { IoLocationOutline } from "react-icons/io5";
 import { IoCallOutline } from "react-icons/io5";
 import PaymentFailedGif from "../assets/payment_failed.gif";
 import { useState, useEffect } from "react";
+import DownloadInvoice from "../Components/DownloadInvoice";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { details, setDetails, setCurrentStep } = useSettings();
+  const [initDownloadInvoice, setInitDownloadInvoice] = useState(false);
 
   const query = new URLSearchParams(window.location.search);
   const status = query.get("status");
@@ -90,6 +92,10 @@ const Checkout = () => {
     setDetails({});
     setCurrentStep(1);
     return navigate("/");
+  };
+
+  const handleDownloadInvoice = () => {
+    setInitDownloadInvoice(true);
   };
 
   // console.log(registrationDetails);
@@ -183,7 +189,10 @@ const Checkout = () => {
                       </div>
                       {/* <div className="divider my-[0px]"></div> */}
                       <div className="grid sm:flex sm:flex-row gap-2 sm:gap-3 items-center justify-center w-full mt-5 text-center">
-                        <button className="rounded-md py-2 px-3 text-[16px] bg-rose-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none">
+                        <button
+                          onClick={handleDownloadInvoice}
+                          className="rounded-md py-2 px-3 text-[16px] bg-rose-600 text-white font-[400] active:scale-95 shadow-lg active:shadow-none"
+                        >
                           Download Invoice
                         </button>
                         <button
@@ -218,6 +227,9 @@ const Checkout = () => {
           )}
         </section>
       </main>
+      {initDownloadInvoice && (
+        <DownloadInvoice uid={registrationDetails?.uid} />
+      )}
     </>
   );
 };
