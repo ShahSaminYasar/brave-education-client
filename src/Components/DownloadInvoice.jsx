@@ -4,30 +4,41 @@ import moment from "moment";
 import useRegistrations from "../hooks/useRegistrations";
 import useCourses from "../hooks/useCourses";
 import useBatch from "../hooks/useBatch";
+import useSettings from "../hooks/useSettings";
 
 const DownloadInvoice = ({ uid }) => {
+  const { downloadInvoice, setDownloadInvoice } = useSettings();
+
   const [registrationDetails, setRegistrationDetails] = useState({});
+  const [batchDetails, setBatchDetails] = useState({});
+  const [courseDetails, setCourseDetails] = useState({});
+
   const getRegistrationDetails = useRegistrations(uid);
-  const courseDetails = useCourses(registrationDetails?.course || "");
-  const batchDetails = useBatch(
-    registrationDetails?.course || "000",
-    registrationDetails?.batch || "000"
+  const getCourseDetails = useCourses(
+    registrationDetails?.course || "000000000000000000000000"
+  );
+  const getBatchDetails = useBatch(
+    registrationDetails?.batch || "000000000000000000000000"
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!getRegistrationDetails?.isLoading) {
-        setRegistrationDetails(getRegistrationDetails?.[0]);
-      }
-    };
-
-    fetchData();
-  }, [getRegistrationDetails]);
+    if (!getRegistrationDetails?.isLoading) {
+      setRegistrationDetails(getRegistrationDetails?.data?.[0]);
+      console.log(getRegistrationDetails?.data?.[0]);
+    }
+    if (!getCourseDetails?.isLoading) {
+      setCourseDetails(getCourseDetails?.[0]);
+      console.log(getCourseDetails);
+    }
+    if (!getBatchDetails?.isLoading) {
+      setBatchDetails(getBatchDetails);
+      console.log(getBatchDetails);
+    }
+  }, [getRegistrationDetails, getCourseDetails, getBatchDetails]);
 
   useEffect(() => {
-    const handleDownloadInvoice = () => {
+    const handleDownloadInvoice = async () => {
       const doc = new jsPDF("p", "mm", "a4");
-
       doc
         .setFontSize(25)
         .setFont("Helvetica")
@@ -42,7 +53,7 @@ const DownloadInvoice = ({ uid }) => {
         )
         .text(
           `${registrationDetails?.batch ? "Course" : "Test"}: ${
-            courseDetails?.name
+            courseDetails?.[0]?.name
           }`,
           15,
           40
@@ -56,26 +67,34 @@ const DownloadInvoice = ({ uid }) => {
         .text(`Price: ${courseDetails?.offerPrice}`, 15, 90)
         .setTextColor("navy")
         .text(`${registrationDetails?.paid ? "PAID" : "NOT PAID"}`, 15, 96);
-
       // Save the PDF
       doc.save("invoice.pdf");
     };
 
     if (
       !getRegistrationDetails?.isLoading &&
-      !courseDetails?.isLoading &&
-      !batchDetails?.isLoading
+      !getCourseDetails?.isLoading &&
+      !getBatchDetails?.isLoading &&
+      downloadInvoice
     ) {
-      handleDownloadInvoice();
+      setDownloadInvoice(false);
+      console.log("courseDetails", courseDetails);
+      if (downloadInvoice) {
+        handleDownloadInvoice();
+      }
     }
   }, [
     getRegistrationDetails,
-    courseDetails,
+    getCourseDetails,
+    getBatchDetails,
     batchDetails,
+    courseDetails,
     registrationDetails,
+    downloadInvoice,
+    setDownloadInvoice,
   ]);
 
-  return null;
+  return "";
 };
 
 export default DownloadInvoice;

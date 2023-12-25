@@ -4,6 +4,7 @@ export const SettingsContext = createContext(null);
 
 const SettingsProvider = ({ children }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [downloadInvoice, setDownloadInvoice] = useState(false);
 
   const steps = ["services", "datetime", "details", "cart", "confirm"];
 
@@ -29,6 +30,8 @@ const SettingsProvider = ({ children }) => {
     prevStep,
     details,
     setDetails,
+    downloadInvoice,
+    setDownloadInvoice,
   };
 
   return (

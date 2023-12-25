@@ -12,12 +12,12 @@ import { IoLocationOutline } from "react-icons/io5";
 import { IoCallOutline } from "react-icons/io5";
 import PaymentFailedGif from "../assets/payment_failed.gif";
 import { useState, useEffect } from "react";
-import DownloadInvoice from "../Components/DownloadInvoice";
+import jsPDF from "jspdf";
+import useBatch from "../hooks/useBatch";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { details, setDetails, setCurrentStep } = useSettings();
-  const [initDownloadInvoice, setInitDownloadInvoice] = useState(false);
 
   const query = new URLSearchParams(window.location.search);
   const status = query.get("status");
@@ -47,8 +47,13 @@ const Checkout = () => {
           paid,
           uid,
         });
+        setDetails({
+          ...tempDetails,
+          paid,
+          uid,
+        });
         sessionStorage.removeItem("be_details_temp");
-        console.log("Operation DOne");
+        // console.log("Operation DOne");
         setLoading(false);
       } else {
         // console.log("No RD");
@@ -57,7 +62,7 @@ const Checkout = () => {
     };
 
     fetchRegistrationDetails();
-  }, [details, paid, uid]);
+  }, [details, paid, uid, setDetails]);
 
   const enrolledCourses = JSON.parse(
     localStorage.getItem("be_enrolled_courses")
@@ -83,6 +88,10 @@ const Checkout = () => {
   }, [uid, enrolledCourses, registrationDetails]);
 
   const courseDetails = useCourses(registrationDetails?.course);
+  const batchDetails = useBatch(
+    registrationDetails?.course || "000000000000000000000000",
+    registrationDetails?.batch || "00000"
+  );
 
   if (!loading && !registrationDetails && status === "successful") {
     return <Navigate to="/" />;
@@ -95,10 +104,71 @@ const Checkout = () => {
   };
 
   const handleDownloadInvoice = () => {
-    setInitDownloadInvoice(true);
-  };
+    const doc = new jsPDF("p", "mm", "a4");
+    doc
+      .setFontSize(25)
+      .setFont("Helvetica")
+      .setTextColor("black")
+      .text("BRAVE EDUCATION", 15, 20)
+      .setFontSize(12)
+      .text(
+        `Registration: ${moment(registrationDetails?.registeredOn).format(
+          "DD MMMM YYYY [at] hh:mma"
+        )}`,
+        15,
+        30
+      )
+      .text(
+        `${registrationDetails?.batch ? "Course" : "Test"}: ${
+          courseDetails?.[0]?.name
+        }`,
+        15,
+        40
+      );
 
-  // console.log(registrationDetails);
+    registrationDetails?.batch
+      ? doc
+          .text(`Batch: ${batchDetails?.name}`, 15, 46)
+          .text(`Routine: ${batchDetails?.schedule}`, 15, 52)
+      : doc
+          .text(
+            `Date: ${moment(registrationDetails?.schedule?.date).format(
+              "DD MMMM YYYY"
+            )}`,
+            15,
+            46
+          )
+          .text(`Time: ${registrationDetails?.schedule?.time}`, 15, 52);
+
+    doc
+      .text(`Name: ${registrationDetails?.student?.name}`, 15, 62)
+      .text(`Phone: ${registrationDetails?.student?.phone}`, 15, 68)
+      .text(`Email: ${registrationDetails?.student?.email}`, 15, 74)
+      .text(`Gender: ${registrationDetails?.student?.gender}`, 15, 80)
+      .setFontSize(14)
+      .setTextColor("orangered")
+      .setFillColor("yellow")
+      .text(`ID: ${registrationDetails?.uid}`, 15, 90)
+      .setFontSize(12)
+      .setFillColor("white")
+      .setTextColor("black")
+      .text(`Price: Tk. ${courseDetails?.[0]?.offerPrice}`, 15, 100)
+      .setTextColor("navy")
+      .text(`${registrationDetails?.paid ? "PAID" : "NOT PAID"}`, 15, 106)
+      .setTextColor("darkslategray")
+      .text("Thank you.", 15, 117)
+      .setTextColor("red")
+      .setFontSize(10)
+      .text("Hotline: 01937-805552", 15, 123)
+      .setTextColor("darkslateblue")
+      .text(
+        "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
+        15,
+        128
+      );
+    // Save the PDF
+    doc.save(`Invoice_${registrationDetails?.uid || "BE"}.pdf`);
+  };
 
   return (
     <>
@@ -227,9 +297,6 @@ const Checkout = () => {
           )}
         </section>
       </main>
-      {initDownloadInvoice && (
-        <DownloadInvoice uid={registrationDetails?.uid} />
-      )}
     </>
   );
 };

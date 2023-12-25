@@ -49,7 +49,10 @@ const Confirmation = () => {
 
     try {
       if (paymentMethod === "bkash") {
-        sessionStorage.setItem("be_details_temp", JSON.stringify(details));
+        sessionStorage.setItem(
+          "be_details_temp",
+          JSON.stringify({ ...details, registeredOn: moment().format() })
+        );
         const { data: response } = await axios.post("/bkash-checkout", {
           courseId: details?.course,
           details: sessionDetails,
@@ -62,7 +65,12 @@ const Confirmation = () => {
           details: sessionDetails,
         });
         if (data?.message === "success") {
-          setDetails({ ...details, uid: data?.uid, paid: data?.paid });
+          setDetails({
+            ...details,
+            uid: data?.uid,
+            paid: data?.paid,
+            registeredOn: moment().format(),
+          });
           setConfirming(false);
           return navigate("/checkout?status=successful");
         } else {
