@@ -130,7 +130,7 @@ const Datetime = () => {
                       <>
                         <span className="font-[800] block mt-2">Details:</span>
                         {batch?.features?.split(",")?.map(feature => (
-                          <span className={`flex flex-row justify-between items-center gap-2 font-[400] ${batch?.id === details?.batch
+                          <span key={feature} className={`flex flex-row justify-between items-center gap-2 font-[400] ${batch?.id === details?.batch
                             ? "text-slate-200"
                             : "text-indigo-950"
                             }`}>
