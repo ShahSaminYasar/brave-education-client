@@ -5,7 +5,7 @@ import SupportSVG from "../assets/support.svg";
 import { useState } from "react";
 
 const Header = () => {
-  const { setCurrentStep } = useSettings();
+  const { setCurrentStep, setDetails } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
   const url = location.pathname;
@@ -36,13 +36,15 @@ const Header = () => {
             <a href="tel:+01937805552">01937-805552</a>
           </span>
 
-          <Link to="/" className="h-[70px] py-3">
+          <button onClick={() => {
+            window.location.replace("/")
+          }} className="h-[70px] py-3">
             <img
               src={Logo}
               alt="Brave Education Logo"
               className="h-full object-contain"
             />
-          </Link>
+          </button>
 
           <button
             onClick={() => {
@@ -89,8 +91,9 @@ const Header = () => {
             <button
               onClick={() => {
                 if (isAccountPage || isAdminPage) {
-                  setCurrentStep(1);
-                  return navigate("/");
+                  // setDetails({})
+                  // setCurrentStep(1)
+                  console.log("Clicked");
                 } else {
                   return navigate("/enrolled-courses");
                 }
