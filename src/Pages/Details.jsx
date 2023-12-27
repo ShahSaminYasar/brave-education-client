@@ -29,7 +29,9 @@ const Details = () => {
     const phone = form.phone.value;
     const data = { name, email, phone, gender };
     setDetails({ ...details, student: data });
-    localStorage.setItem("be_student", JSON.stringify(data));
+    if(!localStudentData){
+      localStorage.setItem("be_student_temp", JSON.stringify(data));
+    }
     // console.log(
     //   data?.name,
     //   details?.schedule?.date,

@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import BraveFavicon from "../assets/favicon-brave.jpg";
 import useAxios from "../hooks/useAxios";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AdminRoute = ({ children }) => {
   const check = localStorage.getItem("be_admin")
