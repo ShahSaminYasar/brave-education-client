@@ -62,7 +62,7 @@ const AdminLayout = () => {
                     }`
                   }
                 >
-                  Add Course
+                  Add Course/Test
                 </NavLink>
                 <NavLink
                   to="/admin/register-student"

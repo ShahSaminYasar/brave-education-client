@@ -9,6 +9,7 @@ import AdminCourses from "../Pages/Dashboard/Admin/AdminCourses";
 import AddCourse from "../Pages/Dashboard/Admin/AddCourse";
 import EditCourse from "../Pages/Dashboard/Admin/EditCourse";
 import AddStudent from "../Pages/Dashboard/Admin/AddStudent";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: <AdminRoute><AdminLayout /></AdminRoute>,
     children: [
       {
         index: true,

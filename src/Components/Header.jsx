@@ -49,6 +49,7 @@ const Header = () => {
           <button
             onClick={() => {
               if (isAccountPage || isAdminPage) {
+                setDetails(1)
                 setCurrentStep(1);
                 return navigate("/");
               } else {
@@ -73,13 +74,15 @@ const Header = () => {
         <div
           className={`w-full max-w-[960px] mx-auto flex flex-col sm:flex-row sm:justify-between items-center px-[12px] gap-3`}
         >
-          <Link to="/" className="h-[70px] py-3">
+          <button onClick={() => {
+            window.location.replace("/")
+          }} className="h-[70px] py-3">
             <img
               src={Logo}
               alt="Brave Education Logo"
               className="h-full object-contain"
             />
-          </Link>
+          </button>
 
           <div
             className={`text-[17px] 2xl:text-[20px] font-[600] flex flex-row gap-3 justify-between items-center flex-wrap w-full sm:w-fit text-[#E94D4E] pb-2 sm:pb-0`}
@@ -91,9 +94,9 @@ const Header = () => {
             <button
               onClick={() => {
                 if (isAccountPage || isAdminPage) {
-                  // setDetails({})
-                  // setCurrentStep(1)
-                  console.log("Clicked");
+                  setDetails(1)
+                  setCurrentStep(1);
+                  return navigate("/");
                 } else {
                   return navigate("/enrolled-courses");
                 }

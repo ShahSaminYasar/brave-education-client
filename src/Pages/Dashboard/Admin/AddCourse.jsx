@@ -140,7 +140,7 @@ const AddCourse = () => {
       return;
     }
     try {
-      const response = await axiosSecure.post("/courses", { data });
+      const response = await axiosSecure.post("/courses", { data, token: localStorage.getItem("be_admin") });
       if (response?.data?.message === "success") {
         toast.success("Course published");
         setAdding(false);

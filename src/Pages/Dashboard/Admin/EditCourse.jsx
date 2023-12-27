@@ -19,6 +19,7 @@ const EditCourse = () => {
   const axiosSecure = useAxios();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const token = localStorage.getItem("be_admin")
 
   const [updating, setUpdating] = useState(false);
   const [dateValue, setDateValue] = useState();
@@ -161,7 +162,7 @@ const EditCourse = () => {
       return;
     }
     try {
-      const response = await axiosSecure.put("/courses", { courseId, data });
+      const response = await axiosSecure.put("/courses", { courseId, data, token });
       if (response?.data?.message === "success") {
         toast.success("Course data updated");
         setUpdating(false);

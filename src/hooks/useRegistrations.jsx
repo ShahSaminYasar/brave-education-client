@@ -3,11 +3,12 @@ import useAxios from "./useAxios";
 
 const useRegistrations = (findBy) => {
   const axios = useAxios();
+  const token = localStorage.getItem("be_admin");
 
-  let url = "/registrations";
+  let url = `/registrations?token=${token}`;
 
   if (findBy) {
-    url = `/registrations?findBy=${findBy}`;
+    url = `/registrations?findBy=${findBy}&token=${token}`;
   }
 
   const { data, isLoading, isError, error, refetch } = useQuery({

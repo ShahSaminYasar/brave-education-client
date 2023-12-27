@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "./useAxios";
 
-const useBatch = (courseId, batchId) => {
+const useBatch = (courseId = "000000000000000000000000", batchId = "000000000000000000000000") => {
   const axios = useAxios();
 
   const { data, isLoading, isError, error } = useQuery({

@@ -49,7 +49,7 @@ const AddStudent = () => {
       phone: form?.phone?.value,
       email: form?.email?.value,
       gender: form?.gender?.value,
-      paid: Boolean(form?.paid?.value),
+      paid: form?.paid?.value,
       registeredOn: moment().format(),
       course: course,
     };
@@ -60,7 +60,7 @@ const AddStudent = () => {
       data.batch = parseInt(batch);
     }
     try {
-      const response = await axiosSecure.post("register-student", { data });
+      const response = await axiosSecure.post("register-student", { data, token: localStorage.getItem("be_admin") });
       if (response?.data?.message === "success") {
         setAdding(false);
         Swal.fire({
@@ -122,6 +122,7 @@ const AddStudent = () => {
           ) : type === "test" ? (
             <select
               name="shift"
+              defaultValue="null"
               className="w-full bg-white p-2 rounded-md text-slate-800 border border-slate-200"
               onChange={(e) => {
                 let dateTimeValue = e.target.value;
@@ -129,7 +130,7 @@ const AddStudent = () => {
                 setTime(dateTimeValue?.split(",")?.pop());
               }}
             >
-              <option value="null" disabled selected>
+              <option value="null" disabled>
                 Please select a schedule/batch
               </option>
               {schedule?.batches?.map((batch) =>
@@ -146,12 +147,13 @@ const AddStudent = () => {
           ) : (
             <select
               name="shift"
+              defaultValue="null"
               className="w-full bg-white p-2 rounded-md text-slate-800 border border-slate-200"
               onChange={(e) => {
                 setBatch(e.target.value);
               }}
             >
-              <option value="null" disabled selected>
+              <option value="null" disabled>
                 Please select a schedule/batch
               </option>
               {schedule?.batches?.map((batch) => (

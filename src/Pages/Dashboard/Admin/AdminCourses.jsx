@@ -10,6 +10,7 @@ const AdminCourses = () => {
   const courses = useCourses(null, true);
   const axios = useAxios();
   const queryClient = useQueryClient();
+  const token = localStorage.getItem("be_admin")
 
   const handleSetActiveStatus = async (courseId, status) => {
     Swal.fire({
@@ -23,7 +24,7 @@ const AdminCourses = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .put("/courses", { courseId, courseStatus: status })
+          .put("/courses", { courseId, courseStatus: status, token })
           .then((res) => {
             if (res?.data?.message === "success") {
               queryClient.invalidateQueries(["getCourses"]);
