@@ -8,6 +8,7 @@ import useAxios from "../../../hooks/useAxios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { Helmet } from "react-helmet";
 
 const AddStudent = () => {
   const axiosSecure = useAxios();
@@ -60,7 +61,10 @@ const AddStudent = () => {
       data.batch = parseInt(batch);
     }
     try {
-      const response = await axiosSecure.post("register-student", { data, token: localStorage.getItem("be_admin") });
+      const response = await axiosSecure.post("register-student", {
+        data,
+        token: localStorage.getItem("be_admin"),
+      });
       if (response?.data?.message === "success") {
         setAdding(false);
         Swal.fire({
@@ -85,6 +89,9 @@ const AddStudent = () => {
 
   return (
     <section className="text-[17px] 2xl:text-[20px] text-slate-800 w-full">
+      <Helmet>
+        <title>Add Student | Brave Education</title>
+      </Helmet>
       <Title>Register a student</Title>
       <form
         onSubmit={handleSubmit}

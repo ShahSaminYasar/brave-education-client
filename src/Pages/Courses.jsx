@@ -60,7 +60,7 @@ const Courses = () => {
   return (
     <>
       <ScrollRestoration />
-      <Title>Select a course</Title>
+      <Title>Select a course/test</Title>
       <section className="flex flex-col gap-5">
         <h4 className="text-[18px] 2xl:text-[20px] text-slate-900 font-[400] -mb-[10px]">
           Tests

@@ -8,6 +8,7 @@ import moment from "moment";
 import { FaTrash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { Helmet } from "react-helmet";
 
 const AddCourse = () => {
   const axiosSecure = useAxios();
@@ -61,7 +62,15 @@ const AddCourse = () => {
     let schedule = [];
     let features = "";
     let duration = "";
-    let batchObject = { id, name, capacity, enrolled, schedule, duration, features };
+    let batchObject = {
+      id,
+      name,
+      capacity,
+      enrolled,
+      schedule,
+      duration,
+      features,
+    };
     setBatches([...batches, batchObject]);
   };
 
@@ -140,7 +149,10 @@ const AddCourse = () => {
       return;
     }
     try {
-      const response = await axiosSecure.post("/courses", { data, token: localStorage.getItem("be_admin") });
+      const response = await axiosSecure.post("/courses", {
+        data,
+        token: localStorage.getItem("be_admin"),
+      });
       if (response?.data?.message === "success") {
         toast.success("Course published");
         setAdding(false);
@@ -162,6 +174,9 @@ const AddCourse = () => {
 
   return (
     <section className="text-[17px] 2xl:text-[20px] text-slate-800 w-full">
+      <Helmet>
+        <title>Add Course | Brave Education</title>
+      </Helmet>
       <form
         onSubmit={handleAddCourse}
         className="w-full max-w-[500px] mx-auto flex flex-col gap-3"

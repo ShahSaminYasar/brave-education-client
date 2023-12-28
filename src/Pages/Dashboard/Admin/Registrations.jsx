@@ -3,6 +3,7 @@ import Title from "../../../Components/Title";
 import useRegistrations from "../../../hooks/useRegistrations";
 import { TfiReload } from "react-icons/tfi";
 import Registration from "./Registration";
+import { Helmet } from "react-helmet";
 
 const Registrations = () => {
   const [findBy, setFindBy] = useState(null);
@@ -16,6 +17,9 @@ const Registrations = () => {
 
   return (
     <section className="text-[17px] 2xl:text-[20px] text-slate-800 w-full">
+      <Helmet>
+        <title>Registrations | Brave Education</title>
+      </Helmet>
       <div className="flex flex-row flex-wrap justify-between items-center w-full mb-3">
         <Title>Registrations</Title>
         <button
@@ -59,8 +63,7 @@ const Registrations = () => {
         <p className="text-[17px] 2xl:text-[20px] text-red-500">
           {registrationsState?.error || "An error occured, please refresh."}
         </p>
-      ) : 
-      registrations?.length > 0 ? (
+      ) : registrations?.length > 0 ? (
         <div className="overflow-x-auto my-6">
           <table className="table text-[17px] 2xl:text-[20px] text-slate-800 font-[500]">
             {/* head */}
@@ -81,8 +84,11 @@ const Registrations = () => {
             </tbody>
           </table>
         </div>
-      ) : <p className="text-slate-600 block w-full text-center p-3 pt-8">NO DATA</p>
-      }
+      ) : (
+        <p className="text-slate-600 block w-full text-center p-3 pt-8">
+          NO DATA
+        </p>
+      )}
     </section>
   );
 };

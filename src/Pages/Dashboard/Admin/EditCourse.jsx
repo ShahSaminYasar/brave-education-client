@@ -9,6 +9,7 @@ import { FaTrash } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import useCourses from "../../../hooks/useCourses";
 import { useQueryClient } from "@tanstack/react-query";
+import { Helmet } from "react-helmet";
 
 const EditCourse = () => {
   const { id: courseId } = useParams();
@@ -19,7 +20,7 @@ const EditCourse = () => {
   const axiosSecure = useAxios();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const token = localStorage.getItem("be_admin")
+  const token = localStorage.getItem("be_admin");
 
   const [updating, setUpdating] = useState(false);
   const [dateValue, setDateValue] = useState();
@@ -162,7 +163,11 @@ const EditCourse = () => {
       return;
     }
     try {
-      const response = await axiosSecure.put("/courses", { courseId, data, token });
+      const response = await axiosSecure.put("/courses", {
+        courseId,
+        data,
+        token,
+      });
       if (response?.data?.message === "success") {
         toast.success("Course data updated");
         setUpdating(false);
@@ -184,6 +189,9 @@ const EditCourse = () => {
 
   return (
     <section className="text-[17px] 2xl:text-[20px] text-slate-800 w-full">
+      <Helmet>
+        <title>Edit Course | Brave Education</title>
+      </Helmet>
       <form
         onSubmit={handleAddCourse}
         className="w-full max-w-[500px] mx-auto flex flex-col gap-3"
@@ -570,7 +578,9 @@ const EditCourse = () => {
                           })
                         }
                         className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6] min-h-[150px] px-4 py-2"
-                      >{}</textarea>
+                      >
+                        {}
+                      </textarea>
                     </div>
                     <div className="flex flex-row gap-1 flex-wrap justify-end">
                       <button

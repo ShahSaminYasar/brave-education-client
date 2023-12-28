@@ -8,6 +8,7 @@ import useEnrolledCourses from "../../hooks/useEnrolledCourses";
 import { useState } from "react";
 import Login from "../../Components/Auth/Login";
 import Register from "../../Components/Auth/Register";
+import { Helmet } from "react-helmet";
 
 const EnrolledCourses = () => {
   const { setDetails } = useSettings();
@@ -24,6 +25,9 @@ const EnrolledCourses = () => {
   if (checkUser) {
     return (
       <>
+        <Helmet>
+          <title>Enrolled Courses | Brave Education</title>
+        </Helmet>
         <Header />
         <main className="min-h-screen flex flex-col items-center justify-center p-4">
           <section className="bg-white rounded-md px-5 py-7 text-slate-800 text-[17px] 2xl:text-[20px] font-[500] shadow-md w-full max-w-[960px] relative mt-[140px] sm:mt-[100px]">

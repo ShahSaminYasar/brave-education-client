@@ -3,6 +3,7 @@ import BraveFavicon from "../../assets/favicon-brave.jpg";
 import toast from "react-hot-toast";
 import useAxios from "../../hooks/useAxios";
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 
 const Register = ({ setAuthState }) => {
   const tempUser = JSON.parse(localStorage.getItem("be_student_temp"));
@@ -40,6 +41,9 @@ const Register = ({ setAuthState }) => {
 
   return (
     <section className="bg-white min-h-screen py-20">
+      <Helmet>
+        <title>Register | Brave Education</title>
+      </Helmet>
       <div className="min-h-[80vh] flex flex-col justify-center items-center gap-[70px] bg-white text-slate-900 text-[20px] font-[400] p-5">
         <Link to="/">
           <img

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import useAxios from "../../../hooks/useAxios";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { Helmet } from "react-helmet";
 
 const Students = () => {
   const [findBy, setFindBy] = useState();
@@ -47,6 +48,9 @@ const Students = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Students | Brave Education</title>
+      </Helmet>
       <section className="text-[17px] 2xl:text-[20px] text-slate-800 w-full">
         <Title>Registered Students</Title>
         <div className="flex flex-row justify-end mb-10">

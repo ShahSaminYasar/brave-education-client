@@ -6,6 +6,7 @@ import useAxios from "../../../hooks/useAxios";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { FaCopy } from "react-icons/fa6";
+import { Helmet } from "react-helmet";
 
 const AdminCourses = () => {
   const courses = useCourses(null, true);
@@ -46,6 +47,9 @@ const AdminCourses = () => {
 
   return (
     <section className="text-[17px] 2xl:text-[20px] text-slate-800 w-full">
+      <Helmet>
+        <title>All Courses | Brave Education</title>
+      </Helmet>
       <div className="flex flex-row flex-wrap justify-between items-center w-full mb-3">
         <Title>Courses</Title>
       </div>

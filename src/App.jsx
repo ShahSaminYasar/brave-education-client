@@ -5,12 +5,16 @@ import Cart from "./Pages/Cart";
 import Confirmation from "./Pages/Confirmation";
 import useSettings from "./hooks/useSettings";
 import Header from "./Components/Header";
+import { Helmet } from "react-helmet";
 
 const App = () => {
   const { steps, currentStep } = useSettings();
 
   return (
     <>
+      <Helmet>
+        <title>Enroll | Brave Education</title>
+      </Helmet>
       <Header />
       <main className="bg-transparent flex flex-col justify-center items-center py-5 text-[17px] 2xl:text-[20px] px-3">
         <div className="w-full max-w-[700px] mt-[140px] sm:mt-[100px]">
