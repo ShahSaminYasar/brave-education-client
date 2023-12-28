@@ -1,6 +1,7 @@
 {
   "name": "brave-registration-client",
   "private": true,
+  "homepage": "https://register.braveeducationbd.com",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
