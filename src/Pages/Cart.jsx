@@ -35,24 +35,50 @@ const Cart = () => {
               </h3>
               <span>
                 Duration:{" "}
-                {courseDetails?.[0]?.duration >= 60
-                  ? parseInt(courseDetails?.[0]?.duration / 60) +
-                    "H " +
+                {courseDetails?.[0]?.duration >= 525600 // 365 days in minutes
+                  ? `${Math.floor(
+                      courseDetails?.[0]?.duration / 525600
+                    )} Years ` +
+                    (courseDetails?.[0]?.duration % 525600 >= 43200 // 30 days in minutes
+                      ? `${Math.floor(
+                          (courseDetails?.[0]?.duration % 525600) / 43200
+                        )} Months `
+                      : "")
+                  : courseDetails?.[0]?.duration >= 43200 // 30 days in minutes
+                  ? `${Math.floor(
+                      courseDetails?.[0]?.duration / 43200
+                    )} Months `
+                  : courseDetails?.[0]?.duration >= 1440
+                  ? `${Math.floor(courseDetails?.[0]?.duration / 1440)} Days ` +
+                    (courseDetails?.[0]?.duration % 1440 >= 60
+                      ? `${Math.floor(
+                          (courseDetails?.[0]?.duration % 1440) / 60
+                        )} Hours `
+                      : "") +
                     (courseDetails?.[0]?.duration % 60 === 0
                       ? ""
-                      : (courseDetails?.[0]?.duration % 60) + "M")
-                  : courseDetails?.[0]?.duration + "M"}
+                      : `${courseDetails?.[0]?.duration % 60} Minutes`)
+                  : courseDetails?.[0]?.duration >= 60
+                  ? `${Math.floor(courseDetails?.[0]?.duration / 60)} Hours ` +
+                    (courseDetails?.[0]?.duration % 60 === 0
+                      ? ""
+                      : `${courseDetails?.[0]?.duration % 60} Minutes`)
+                  : `${courseDetails?.[0]?.duration} Minutes`}
               </span>
-              <span>
-                Schedule:{" "}
-                <span className="text-indigo-700 font-[600]">
-                  {moment(details?.schedule?.date).format("D MMMM YYYY")}
-                </span>{" "}
-                at{" "}
-                <span className="text-indigo-700 font-[600]">
-                  {details?.schedule?.time}
+              {courseDetails?.[0]?.type === "test" ? (
+                <span>
+                  Schedule:{" "}
+                  <span className="text-indigo-700 font-[600]">
+                    {moment(details?.schedule?.date).format("D MMMM YYYY")}
+                  </span>{" "}
+                  at{" "}
+                  <span className="text-indigo-700 font-[600]">
+                    {details?.schedule?.time}
+                  </span>
                 </span>
-              </span>
+              ) : (
+                "Routine: " + details?.batchSchedule
+              )}
               <div className="divider my-[0px]"></div>
               <span>
                 Name:{" "}

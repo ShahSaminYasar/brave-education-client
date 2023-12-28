@@ -10,8 +10,13 @@ import AddCourse from "../Pages/Dashboard/Admin/AddCourse";
 import EditCourse from "../Pages/Dashboard/Admin/EditCourse";
 import AddStudent from "../Pages/Dashboard/Admin/AddStudent";
 import AdminRoute from "./AdminRoute";
+import Students from "../Pages/Dashboard/Admin/Students";
+import Error from "../Pages/Error";
 
 export const router = createBrowserRouter([
+  {
+    errorElement: <Error />,
+  },
   {
     path: "/",
     element: <App />,
@@ -26,7 +31,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminRoute><AdminLayout /></AdminRoute>,
+    element: (
+      <AdminRoute>
+        <AdminLayout />
+      </AdminRoute>
+    ),
     children: [
       {
         index: true,
@@ -51,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: "register-student",
         element: <AddStudent />,
+      },
+      {
+        path: "students",
+        element: <Students />,
       },
     ],
   },

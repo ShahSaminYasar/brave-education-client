@@ -5,12 +5,13 @@ import Swal from "sweetalert2";
 import useAxios from "../../../hooks/useAxios";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { FaCopy } from "react-icons/fa6";
 
 const AdminCourses = () => {
   const courses = useCourses(null, true);
   const axios = useAxios();
   const queryClient = useQueryClient();
-  const token = localStorage.getItem("be_admin")
+  const token = localStorage.getItem("be_admin");
 
   const handleSetActiveStatus = async (courseId, status) => {
     Swal.fire({
@@ -77,13 +78,29 @@ const AdminCourses = () => {
                 </span>
                 <span>
                   Duration:{" "}
-                  {course?.duration >= 60
-                    ? parseInt(course?.duration / 60) +
-                      "H " +
+                  {course?.duration >= 525600 // 365 days in minutes
+                    ? `${Math.floor(course?.duration / 525600)} Years ` +
+                      (course?.duration % 525600 >= 43200 // 30 days in minutes
+                        ? `${Math.floor(
+                            (course?.duration % 525600) / 43200
+                          )} Months `
+                        : "")
+                    : course?.duration >= 43200 // 30 days in minutes
+                    ? `${Math.floor(course?.duration / 43200)} Months `
+                    : course?.duration >= 1440
+                    ? `${Math.floor(course?.duration / 1440)} Days ` +
+                      (course?.duration % 1440 >= 60
+                        ? `${Math.floor((course?.duration % 1440) / 60)} Hours `
+                        : "") +
                       (course?.duration % 60 === 0
                         ? ""
-                        : (course?.duration % 60) + "M")
-                    : course?.duration + "M"}
+                        : `${course?.duration % 60} Minutes`)
+                    : course?.duration >= 60
+                    ? `${Math.floor(course?.duration / 60)} Hours ` +
+                      (course?.duration % 60 === 0
+                        ? ""
+                        : `${course?.duration % 60} Minutes`)
+                    : `${course?.duration} Minutes`}
                 </span>
                 <span>
                   {course?.offerPrice < course?.price ? (
@@ -114,6 +131,15 @@ const AdminCourses = () => {
                     "Tk. " + course?.price
                   )}
                 </span>
+                <button
+                  className="block ml-auto my-0 mt-[-35px]"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`c=${course?._id}`);
+                    return toast("Copied to clipboard");
+                  }}
+                >
+                  <FaCopy className="text-[20px] text-slate-500" />
+                </button>
                 <div className="grid grid-cols-2 gap-2 w-full items-center mt-3 font-[300] text-[16px]">
                   <Link
                     to={`/admin/edit-course/${course?._id}`}

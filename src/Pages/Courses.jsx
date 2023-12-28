@@ -14,7 +14,6 @@ const Courses = () => {
   const query = new URLSearchParams(window.location.search);
   const redirectCourseId = query.get("c");
 
-
   const [selectedCourse, setSelectedCourse] = useState(details?.course);
 
   useEffect(() => {
@@ -28,13 +27,13 @@ const Courses = () => {
 
   useEffect(() => {
     if (!modules?.isLoading && redirectCourseId && !selectedCourse) {
-      let check = modules.find(module => module._id === redirectCourseId);
+      let check = modules.find((module) => module._id === redirectCourseId);
       if (check) {
-        setDetails({ course: redirectCourseId })
-        setCurrentStep(2)
+        setDetails({ course: redirectCourseId });
+        setCurrentStep(2);
       }
     }
-  }, [modules, selectedCourse, redirectCourseId])
+  }, [modules, selectedCourse, redirectCourseId]);
 
   if (modules?.isLoading)
     return (
@@ -55,15 +54,17 @@ const Courses = () => {
       </p>
     );
 
-  courses = modules?.filter(module => module?.type === "course");
-  tests = modules?.filter(module => module?.type === "test");
+  courses = modules?.filter((module) => module?.type === "course");
+  tests = modules?.filter((module) => module?.type === "test");
 
   return (
     <>
       <ScrollRestoration />
       <Title>Select a course</Title>
       <section className="flex flex-col gap-5">
-        <h4 className="text-[18px] 2xl:text-[20px] text-slate-900 font-[400] -mb-[10px]">Tests</h4>
+        <h4 className="text-[18px] 2xl:text-[20px] text-slate-900 font-[400] -mb-[10px]">
+          Tests
+        </h4>
         {tests?.map((test) => (
           <div
             key={test?._id}
@@ -75,10 +76,11 @@ const Courses = () => {
             className="rounded-md overflow-hidden"
           >
             <button
-              className={`w-full flex flex-row items-center gap-3 rounded-md overflow-hidden ${test?._id === selectedCourse
-                ? "bg-indigo-700 text-slate-200"
-                : "bg-[#fffdfe] text-slate-500"
-                } overflow-hidden shadow-sm`}
+              className={`w-full flex flex-row items-center gap-3 rounded-md overflow-hidden ${
+                test?._id === selectedCourse
+                  ? "bg-indigo-700 text-slate-200"
+                  : "bg-[#fffdfe] text-slate-500"
+              } overflow-hidden shadow-sm`}
               onClick={() => setSelectedCourse(test?._id)}
             >
               <img
@@ -88,39 +90,52 @@ const Courses = () => {
               />
               <div className="flex flex-col justify-center items-start text-[14px] sm:text-[15px] font-[400] w-full">
                 <h3
-                  className={`${test?._id === selectedCourse
-                    ? "text-slate-200"
-                    : "text-indigo-700"
-                    } text-[20px] sm:text-[25px] font-[500] text-left`}
+                  className={`${
+                    test?._id === selectedCourse
+                      ? "text-slate-200"
+                      : "text-indigo-700"
+                  } text-[20px] sm:text-[25px] font-[500] text-left`}
                 >
                   {test?.name}
                 </h3>
                 <span>
                   Duration:{" "}
-                  {test?.duration >= 60
-                    ? parseInt(test?.duration / 60) +
-                    "H " +
-                    (test?.duration % 60 === 0
-                      ? ""
-                      : (test?.duration % 60) + "M")
-                    : test?.duration + "M"}
+                  {test?.duration >= 525600 // 365 days in minutes
+                    ? `${Math.floor(test?.duration / 525600)} Years ` +
+                      (test?.duration % 525600 >= 43200 // 30 days in minutes
+                        ? `${Math.floor(
+                            (test?.duration % 525600) / 43200
+                          )} Months `
+                        : "")
+                    : test?.duration >= 43200 // 30 days in minutes
+                    ? `${Math.floor(test?.duration / 43200)} Months `
+                    : test?.duration >= 1440
+                    ? `${Math.floor(test?.duration / 1440)} Days ` +
+                      (test?.duration % 1440 >= 60
+                        ? `${Math.floor((test?.duration % 1440) / 60)} Hours `
+                        : "") +
+                      (test?.duration % 60 === 0
+                        ? ""
+                        : `${test?.duration % 60} Minutes`)
+                    : test?.duration >= 60
+                    ? `${Math.floor(test?.duration / 60)} Hours ` +
+                      (test?.duration % 60 === 0
+                        ? ""
+                        : `${test?.duration % 60} Minutes`)
+                    : `${test?.duration} Minutes`}
                 </span>
                 <span>
                   {test?.offerPrice < test?.price ? (
                     test?.offerPrice === 0 ? (
                       <>
-                        <del className="opacity-50 mr-1">
-                          Tk. {test?.price}
-                        </del>
+                        <del className="opacity-50 mr-1">Tk. {test?.price}</del>
                         <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
                           FREE
                         </span>
                       </>
                     ) : (
                       <>
-                        <del className="opacity-50 mr-1">
-                          Tk. {test?.price}
-                        </del>
+                        <del className="opacity-50 mr-1">Tk. {test?.price}</del>
                         <span className="text-[17px] 2xl:text-[20px] sm:text-[20px] text-green-500 font-[500]">
                           Tk. {test?.offerPrice}
                         </span>
@@ -139,7 +154,9 @@ const Courses = () => {
           </div>
         ))}
 
-        <h4 className="text-[18px] 2xl:text-[20px] text-slate-900 font-[400] -mb-[10px]">Courses</h4>
+        <h4 className="text-[18px] 2xl:text-[20px] text-slate-900 font-[400] -mb-[10px]">
+          Courses
+        </h4>
         {courses?.map((course) => (
           <div
             key={course?._id}
@@ -151,10 +168,11 @@ const Courses = () => {
             className="rounded-md overflow-hidden"
           >
             <button
-              className={`w-full flex flex-row items-center gap-3 rounded-md overflow-hidden ${course?._id === selectedCourse
-                ? "bg-indigo-700 text-slate-200"
-                : "bg-[#fffdfe] text-slate-500"
-                } overflow-hidden shadow-sm`}
+              className={`w-full flex flex-row items-center gap-3 rounded-md overflow-hidden ${
+                course?._id === selectedCourse
+                  ? "bg-indigo-700 text-slate-200"
+                  : "bg-[#fffdfe] text-slate-500"
+              } overflow-hidden shadow-sm`}
               onClick={() => setSelectedCourse(course?._id)}
             >
               <img
@@ -164,22 +182,39 @@ const Courses = () => {
               />
               <div className="flex flex-col justify-center items-start text-[14px] sm:text-[15px] font-[400] w-full">
                 <h3
-                  className={`${course?._id === selectedCourse
-                    ? "text-slate-200"
-                    : "text-indigo-700"
-                    } text-[20px] sm:text-[25px] font-[500] text-left`}
+                  className={`${
+                    course?._id === selectedCourse
+                      ? "text-slate-200"
+                      : "text-indigo-700"
+                  } text-[20px] sm:text-[25px] font-[500] text-left`}
                 >
                   {course?.name}
                 </h3>
                 <span>
                   Duration:{" "}
-                  {course?.duration >= 60
-                    ? parseInt(course?.duration / 60) +
-                    "H " +
-                    (course?.duration % 60 === 0
-                      ? ""
-                      : (course?.duration % 60) + "M")
-                    : course?.duration + "M"}
+                  {course?.duration >= 525600 // 365 days in minutes
+                    ? `${Math.floor(course?.duration / 525600)} Years ` +
+                      (course?.duration % 525600 >= 43200 // 30 days in minutes
+                        ? `${Math.floor(
+                            (course?.duration % 525600) / 43200
+                          )} Months `
+                        : "")
+                    : course?.duration >= 43200 // 30 days in minutes
+                    ? `${Math.floor(course?.duration / 43200)} Months `
+                    : course?.duration >= 1440
+                    ? `${Math.floor(course?.duration / 1440)} Days ` +
+                      (course?.duration % 1440 >= 60
+                        ? `${Math.floor((course?.duration % 1440) / 60)} Hours `
+                        : "") +
+                      (course?.duration % 60 === 0
+                        ? ""
+                        : `${course?.duration % 60} Minutes`)
+                    : course?.duration >= 60
+                    ? `${Math.floor(course?.duration / 60)} Hours ` +
+                      (course?.duration % 60 === 0
+                        ? ""
+                        : `${course?.duration % 60} Minutes`)
+                    : `${course?.duration} Minutes`}
                 </span>
                 <span>
                   {course?.offerPrice < course?.price ? (

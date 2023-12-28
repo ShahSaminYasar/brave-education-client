@@ -5,25 +5,23 @@ import Header from "../../Components/Header";
 import EmptyGif from "../../assets/empty.gif";
 import useSettings from "../../hooks/useSettings";
 import useEnrolledCourses from "../../hooks/useEnrolledCourses";
-import BraveFavicon from "../../assets/favicon-brave.jpg";
 import { useState } from "react";
+import Login from "../../Components/Auth/Login";
+import Register from "../../Components/Auth/Register";
 
 const EnrolledCourses = () => {
-  const enrolled = useEnrolledCourses("01723799107");
-
-  const [authState, setAuthState] = useState("register");
-
-  const { setCurrentStep } = useSettings();
-  const navigate = useNavigate();
-
+  const { setDetails } = useSettings();
   const checkUser = localStorage.getItem("be_student");
-  const tempUser = JSON.parse(localStorage.getItem("be_student_temp"));
+  const navigate = useNavigate();
+  const { setCurrentStep } = useSettings();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-  };
+  const enrolled = useEnrolledCourses(
+    JSON.parse(checkUser)?.phone || "000000000"
+  );
 
-  if (localStorage.getItem("be_student")) {
+  const [authState, setAuthState] = useState("login");
+
+  if (checkUser) {
     return (
       <>
         <Header />
@@ -66,130 +64,24 @@ const EnrolledCourses = () => {
               )}
             </div>
           </section>
+          <button
+            onClick={() => {
+              localStorage.removeItem("be_student");
+              setDetails({});
+              return navigate("/");
+            }}
+            className="btn bg-red-500 text-white block ml-auto mr-2 mb-2 mt-10"
+          >
+            Logout
+          </button>
         </main>
       </>
     );
   } else {
     return authState === "register" ? (
-      <section className="bg-white min-h-screen">
-        <div className="min-h-[80vh] flex flex-col justify-center items-center gap-[70px] bg-white text-slate-900 text-[20px] font-[400]">
-          <Link to="/">
-            <img
-              src={BraveFavicon}
-              alt="Brave Education Logo"
-              className="w-[120px] aspect-square rounded-full object-contain"
-            />
-          </Link>
-          <form
-            onSubmit={handleLogin}
-            className="text-[20px] font-[400] text-slate-900 flex flex-col gap-4 items-start shadow-md p-5 w-full max-w-[400px]"
-          >
-            <h1 className="text-[25px] text-red-500 block text-left">
-              Register
-            </h1>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              defaultValue={tempUser?.name}
-              className="w-full outline-none input input-bordered bg-white"
-            />
-            <input
-              type="number"
-              name="phone"
-              placeholder="Phone"
-              disabled={tempUser?.phone}
-              defaultValue={tempUser?.phone}
-              className="w-full outline-none input input-bordered bg-white disabled:bg-slate-200 disabled:border-none disabled:outline-none disabled:text-slate-700"
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              defaultValue={tempUser?.email}
-              className="w-full outline-none input input-bordered bg-white"
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="w-full outline-none input input-bordered bg-white"
-            />
-            <input
-              type="password"
-              name="repassword"
-              placeholder="Confirm Password"
-              className="w-full outline-none input input-bordered bg-white"
-            />
-            <button
-              type="submit"
-              className="btn bg-red-500 text-[18px] text-white block w-full border-none"
-            >
-              Login
-            </button>
-            <p>
-              Already have an account?{" "}
-              <button
-                type="button"
-                onClick={() => setAuthState("login")}
-                className="text-red-500"
-              >
-                Login
-              </button>
-            </p>
-          </form>
-        </div>
-      </section>
+      <Register setAuthState={setAuthState} />
     ) : (
-      <section className="bg-white min-h-screen">
-        <div className="min-h-[80vh] flex flex-col justify-center items-center gap-[70px] bg-white text-slate-900 text-[20px] font-[400]">
-          <Link to="/">
-            <img
-              src={BraveFavicon}
-              alt="Brave Education Logo"
-              className="w-[120px] aspect-square rounded-full object-contain"
-            />
-          </Link>
-          <form
-            onSubmit={handleLogin}
-            className="text-[20px] font-[400] text-slate-900 flex flex-col gap-4 items-start shadow-md p-5 w-full max-w-[400px]"
-          >
-            <h1 className="text-[25px] text-red-500 block text-left">
-              Login
-            </h1>
-            <input
-              type="number"
-              name="phone"
-              placeholder="Phone"
-              disabled={tempUser?.phone}
-              defaultValue={tempUser?.phone}
-              className="w-full outline-none input input-bordered bg-white disabled:bg-slate-200 disabled:border-none disabled:outline-none disabled:text-slate-700"
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="w-full outline-none input input-bordered bg-white"
-            />
-            <button
-              type="submit"
-              className="btn bg-red-500 text-[18px] text-white block w-full border-none"
-            >
-              Login
-            </button>
-            <p>
-              New user?{" "}
-              <button
-                type="button"
-                onClick={() => setAuthState("register")}
-                className="text-red-500"
-              >
-                Register
-              </button>
-            </p>
-          </form>
-        </div>
-      </section>
+      <Login setAuthState={setAuthState} />
     );
   }
 };
