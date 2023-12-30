@@ -83,6 +83,7 @@ const EnrolledCourses = () => {
           <button
             onClick={() => {
               localStorage.removeItem("be_student");
+              localStorage.removeItem("be_student_temp");
               setDetails({});
               return navigate("/");
             }}

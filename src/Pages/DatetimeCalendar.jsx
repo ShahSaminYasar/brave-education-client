@@ -15,24 +15,21 @@ const Datetime = () => {
     details?.schedule?.date || moment().format("YYYY-MM-DD")
   );
 
-  let schedule = useSchedule(details?.course);
-  const scheduleState = schedule;
-  let schedule_type = schedule?.type;
-  schedule = schedule?.batches;
-  console.log(schedule);
+  const schedule = useSchedule(details?.course, dateValue);
+  // console.log(schedule);
 
   const [scheduleType, setScheduleType] = useState(null);
 
   useEffect(() => {
-    if (!schedule?.isLoading && schedule_type) {
-      if (schedule_type !== scheduleType) {
-        setScheduleType(schedule_type);
+    if (!schedule?.isLoading && schedule?.type) {
+      if (schedule?.type !== scheduleType) {
+        setScheduleType(schedule?.type);
       }
     }
   }, [schedule, scheduleType]);
 
-  const handleSelectTime = (date, time) => {
-    setDetails({ ...details, schedule: { date: date, time } });
+  const handleSelectTime = (time) => {
+    setDetails({ ...details, schedule: { date: dateValue, time } });
   };
 
   const handleSelectBatch = (batchId, batchSchedule) => {
@@ -48,63 +45,59 @@ const Datetime = () => {
         {!scheduleType ? (
           "Loading..."
         ) : scheduleType === "test" ? (
-          <div className="flex justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Calendar
+              minDate={new Date()}
+              value={dateValue}
+              onChange={(value) => {
+                setDetails({
+                  ...details,
+                  schedule: { date: moment(value).format("YYYY-MM-DD") },
+                });
+                setDateValue(moment(value).format("YYYY-MM-DD"));
+              }}
+            />
             <div>
-              {scheduleState?.isLoading ? (
+              {schedule?.isLoading ? (
                 <p className="block text-center text-[16px] text-slate-500">
                   Loading...
                 </p>
-              ) : scheduleState?.error ? (
+              ) : schedule?.error ? (
                 <p className="text-red-500 block text-center text-[16px]">
-                  {scheduleState?.error || "An error occured."}
+                  {schedule?.error || "An error occured."}
                 </p>
-              ) : schedule?.length > 0 ? (
-                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-5 items-center justify-center">
-                  {schedule?.map((date) =>
-                    date?.times?.map((time) => (
-                      <button
-                        disabled={time?.enrolled >= 15}
-                        key={time?.time}
-                        className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${
-                          time?.time === details?.schedule?.time &&
-                          date?.date === details?.schedule?.date
-                            ? "bg-indigo-700 text-slate-200"
-                            : "bg-white text-slate-800"
-                        }`}
-                        onClick={() => handleSelectTime(date?.date, time?.time)}
-                      >
-                        <div className="flex flex-col items-center justify-center gap-1">
-                          <span
-                            className={`font-[800] ${
-                              time?.time === details?.schedule?.time &&
-                              date?.date === details?.schedule?.date
-                                ? "text-white"
-                                : "text-indigo-900"
-                            }`}
-                          >
-                            {moment(date?.date).format("DD MMM YYYY")}
-                          </span>
-                          {time?.time}
-                        </div>
-                        {time?.enrolled >= 15 && (
-                          <span className="text-[12px] p-1 rounded-sm bg-slate-700 text-white absolute top-0 right-0 leading-[10px]">
-                            Full
-                          </span>
-                        )}
-                      </button>
-                    ))
-                  )}
+              ) : schedule?.batches?.times?.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3">
+                  {schedule?.batches?.times?.map((time) => (
+                    <button
+                      disabled={time?.enrolled >= 15}
+                      key={time?.time}
+                      className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${
+                        time?.time === details?.schedule?.time
+                          ? "bg-indigo-700 text-slate-200"
+                          : "bg-white text-slate-800"
+                      }`}
+                      onClick={() => handleSelectTime(time?.time)}
+                    >
+                      {time?.time}{" "}
+                      {time?.enrolled >= 15 && (
+                        <span className="text-[12px] p-1 rounded-sm bg-slate-700 text-white absolute top-0 right-0 leading-[10px]">
+                          Full
+                        </span>
+                      )}
+                    </button>
+                  ))}
                 </div>
               ) : (
                 <p className="block text-center text-[16px] text-slate-500">
-                  Sorry, there are no shifts available yet.
+                  Sorry, there are no shifts on that day.
                 </p>
               )}
             </div>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 gap-4">
-            {schedule?.map((batch) => {
+            {schedule?.batches?.map((batch) => {
               return (
                 <button
                   disabled={batch?.enrolled >= batch?.capacity}
