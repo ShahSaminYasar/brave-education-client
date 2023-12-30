@@ -1,10 +1,11 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Header from "../../../Components/Header";
 import { FaChevronRight } from "react-icons/fa6";
 import Title from "../../../Components/Title";
 import BraveFavicon from "../../../assets/favicon-brave.jpg";
 
 const AdminLayout = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Header />
@@ -12,7 +13,7 @@ const AdminLayout = () => {
         style={{
           background: "linear-gradient(188deg, #142b3c 1.07%, #14153c 117.56%)",
         }}
-        className="min-h-screen flex flex-col items-center justify-start p-4 pb-20 pt-7"
+        className="min-h-screen flex flex-col items-center justify-start px-4 pb-20 pt-7"
       >
         <section className="bg-white rounded-md text-slate-800 text-[17px] 2xl:text-[20px] font-[500] shadow-md w-full max-w-[960px] relative mt-[140px] sm:mt-[100px] overflow-hidden">
           <div className="drawer">
@@ -99,6 +100,15 @@ const AdminLayout = () => {
             </div>
           </div>
         </section>
+        <button
+          onClick={() => {
+            localStorage.removeItem("be_admin");
+            return navigate("/");
+          }}
+          className="text-white bg-red-600 rounded-sm btn border-none mt-5 block w-fit ml-auto"
+        >
+          Logout
+        </button>
       </main>
     </>
   );

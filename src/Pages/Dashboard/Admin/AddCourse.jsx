@@ -500,14 +500,14 @@ const AddCourse = () => {
                         htmlFor="batch_duration"
                         className="text-[15px] text-slate-500 font-[400]"
                       >
-                        Batch Duration
+                        Batch Start Date
                       </label>
                       <input
                         required
                         name="batch_duration"
                         type="text"
                         value={focusedBatch?.duration}
-                        placeholder="Eg. 2 Months 15 Days"
+                        placeholder="Eg. 01 January 2023"
                         onChange={(e) =>
                           setFocusedBatch({
                             ...focusedBatch,

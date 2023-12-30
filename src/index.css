@@ -10,6 +10,7 @@
 
 body {
   min-height: 100vh;
+  padding: 0px !important;
   background: linear-gradient(188deg, #142b3c 1.07%, #14153c 117.56%),
     url(./assets/bg-graphics.jpg);
   /* background: linear-gradient(

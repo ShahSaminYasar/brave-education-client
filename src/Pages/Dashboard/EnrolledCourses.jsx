@@ -36,15 +36,27 @@ const EnrolledCourses = () => {
               {enrolled?.isLoading ? (
                 "Loading..."
               ) : enrolled?.length > 0 ? (
-                enrolled?.map((course) => (
-                  <div key={course?.uid}>
-                    <EnrolledCourseBox
-                      courseId={course?.course}
-                      details={course}
-                    />
-                    <div className="divider my-[0px]"></div>
-                  </div>
-                ))
+                <div className="overflow-x-auto my-6">
+                  <table className="table text-[17px] 2xl:text-[20px] text-slate-800 font-[500]">
+                    {/* head */}
+                    <thead>
+                      <tr className="text-[17px] 2xl:text-[20px] text-slate-700 font-[600]">
+                        <th>Details</th>
+                        <th>Course & Schedule</th>
+                        <th>UID</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {enrolled?.map((course) => (
+                        <EnrolledCourseBox
+                          key={course?.uid}
+                          courseId={course?.course}
+                          details={course}
+                        />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 <>
                   <img

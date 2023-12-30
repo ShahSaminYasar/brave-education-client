@@ -80,6 +80,7 @@ const Registrations = () => {
               {registrations?.map((registration) => (
                 <Registration
                   registration={registration}
+                  refetch={registrationsRefetch}
                   key={registration?.uid}
                 />
               ))}

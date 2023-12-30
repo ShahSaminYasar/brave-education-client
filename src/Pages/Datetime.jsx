@@ -72,10 +72,11 @@ const Datetime = () => {
                     <button
                       disabled={time?.enrolled >= 15}
                       key={time?.time}
-                      className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${time?.time === details?.schedule?.time
-                        ? "bg-indigo-700 text-slate-200"
-                        : "bg-white text-slate-800"
-                        }`}
+                      className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${
+                        time?.time === details?.schedule?.time
+                          ? "bg-indigo-700 text-slate-200"
+                          : "bg-white text-slate-800"
+                      }`}
                       onClick={() => handleSelectTime(time?.time)}
                     >
                       {time?.time}{" "}
@@ -101,27 +102,35 @@ const Datetime = () => {
                 <button
                   disabled={batch?.enrolled >= batch?.capacity}
                   key={batch?.id}
-                  className={`h-fit w-full p-2 flex flex-col flex-wrap justify-start items-start border-2 border-indigo-700 rounded-md shadow-md text-[16px] font-[500] disabled:opacity-50 relative gap-1 ${batch?.id === details?.batch
-                    ? "bg-indigo-700 text-slate-200"
-                    : "bg-white text-slate-800"
-                    }`}
+                  className={`h-fit w-full p-2 flex flex-col flex-wrap justify-start items-start border-2 border-indigo-700 rounded-md shadow-md text-[16px] font-[500] disabled:opacity-50 relative gap-1 ${
+                    batch?.id === details?.batch
+                      ? "bg-indigo-700 text-slate-200"
+                      : "bg-white text-slate-800"
+                  }`}
                   onClick={() => handleSelectBatch(batch?.id, batch?.schedule)}
                 >
                   <span className="text-[20px] block text-center w-full">
                     {batch?.name}
                   </span>
-                  <span className="block text-center w-full font-[400]">
-                    Duration: {batch?.duration}
+                  <span
+                    className={`block text-center font-[400] text-[17px] text-white rounded-md px-2 w-fit mx-auto my-2 ${
+                      batch?.id === details?.batch
+                        ? "bg-red-600"
+                        : "bg-indigo-600"
+                    }`}
+                  >
+                    {batch?.duration}
                   </span>
                   <div className="px-3 text-left flex flex-col gap-0 w-full mx-auto">
                     <span className="font-[800] block">Routine:</span>
                     {batch?.schedule?.split(",")?.map((schedule) => (
                       <span
                         key={schedule}
-                        className={`block text-left w-full ${batch?.id === details?.batch
-                          ? "text-white"
-                          : "text-indigo-900"
-                          }`}
+                        className={`block text-left w-full ${
+                          batch?.id === details?.batch
+                            ? "text-white"
+                            : "text-indigo-900"
+                        }`}
                       >
                         {schedule}
                       </span>
@@ -129,11 +138,15 @@ const Datetime = () => {
                     {batch?.features && (
                       <>
                         <span className="font-[800] block mt-2">Details:</span>
-                        {batch?.features?.split(",")?.map(feature => (
-                          <span key={feature} className={`flex flex-row justify-between items-center gap-2 font-[400] ${batch?.id === details?.batch
-                            ? "text-slate-200"
-                            : "text-indigo-950"
-                            }`}>
+                        {batch?.features?.split(",")?.map((feature) => (
+                          <span
+                            key={feature}
+                            className={`flex flex-row justify-between items-center gap-2 font-[400] ${
+                              batch?.id === details?.batch
+                                ? "text-slate-200"
+                                : "text-indigo-950"
+                            }`}
+                          >
                             <span>{feature?.split("=")?.shift()}: </span>
                             <span>{feature?.split("=")?.pop()}</span>
                           </span>
