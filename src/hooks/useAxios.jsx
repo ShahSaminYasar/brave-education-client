@@ -2,7 +2,8 @@ import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const instance = axios.create({
-  baseURL: "https://server-brave-education.vercel.app/api/v1",
+  // baseURL: "https://server-brave-education.vercel.app/api/v1",
+  baseURL: "http://localhost:4000/api/v1",
   withCredentials: true,
 });
 

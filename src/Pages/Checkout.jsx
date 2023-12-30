@@ -23,6 +23,7 @@ const Checkout = () => {
   const status = query.get("status");
   const uid = details?.uid || query.get("uid");
   const paid = Boolean(details?.paid) || Boolean(query.get("paid"));
+  const payment_method = details?.payment_method || query.get("method");
 
   const [loading, setLoading] = useState(true);
   const [registrationDetails, setRegistrationDetails] = useState(null);
@@ -35,6 +36,7 @@ const Checkout = () => {
     const fetchRegistrationDetails = async () => {
       if (details.uid) {
         // console.log("RD set from state");
+        console.log(details)
         setRegistrationDetails(details);
         setLoading(false);
       } else if (JSON.parse(sessionStorage.getItem("be_details_temp"))) {
@@ -156,15 +158,16 @@ const Checkout = () => {
       .setTextColor("navy")
       .text(`${registrationDetails?.paid ? "PAID" : "NOT PAID"}`, 15, 106)
       .setTextColor("darkslategray")
-      .text("Thank you.", 15, 117)
+      .text(`Payment method: ${registrationDetails?.payment_method?.toUpperCase()}`, 15, 112)
+      .text("Thank you.", 15, 124)
       .setTextColor("red")
       .setFontSize(10)
-      .text("Hotline: 01937-805552", 15, 123)
+      .text("Hotline: 01937-805552", 15, 128)
       .setTextColor("darkslateblue")
       .text(
         "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
         15,
-        128
+        132
       );
     // Save the PDF
     doc.save(`Invoice_${registrationDetails?.uid || "BE"}.pdf`);

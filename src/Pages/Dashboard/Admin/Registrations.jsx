@@ -15,6 +15,8 @@ const Registrations = () => {
   const registrationsRefetch = registrations?.refetch;
   registrations = registrations?.data;
 
+  // console.log(registrations);
+
   return (
     <section className="text-[17px] 2xl:text-[20px] text-slate-800 w-full">
       <Helmet>

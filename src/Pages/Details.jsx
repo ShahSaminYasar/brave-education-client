@@ -11,7 +11,7 @@ const Details = () => {
   const axiosSecure = useAxios();
 
   const [localStudentData, setLocalStudentData] = useState({});
-  const [gender, setGender] = useState(localStudentData?.gender || "");
+  const [gender, setGender] = useState(localStudentData?.gender || JSON.parse(localStorage.getItem("be_student_temp")).gender || "");
 
   useEffect(() => {
     const local_student_data = localStorage.getItem("be_student");
@@ -73,7 +73,7 @@ const Details = () => {
                 required
                 name="name"
                 type="text"
-                defaultValue={localStudentData?.name}
+                defaultValue={localStudentData?.name || JSON.parse(localStorage.getItem("be_student_temp")).name || ""}
                 placeholder="Your Full Name"
                 className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
               />
@@ -88,7 +88,7 @@ const Details = () => {
               <input
                 name="email"
                 type="text"
-                defaultValue={localStudentData?.email}
+                defaultValue={localStudentData?.email || JSON.parse(localStorage.getItem("be_student_temp")).email || ""}
                 placeholder="Your Email Address"
                 className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
               />
@@ -104,7 +104,7 @@ const Details = () => {
                 required
                 name="phone"
                 type="number"
-                defaultValue={localStudentData?.phone}
+                defaultValue={localStudentData?.phone || JSON.parse(localStorage.getItem("be_student_temp")).phone || ""}
                 placeholder="Your Active Phone Number"
                 className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
               />

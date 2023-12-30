@@ -75,6 +75,8 @@ const Registration = ({ registration }) => {
             }`}
           >
             {registration?.paid ? "PAID" : "UNPAID"}
+            <br />
+            <span className="text-[13px] text-teal-700 font-[400]">({registration?.payment_method?.toUpperCase()})</span>
           </span>
         </div>
       </td>

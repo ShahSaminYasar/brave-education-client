@@ -69,6 +69,7 @@ const Confirmation = () => {
             ...details,
             uid: data?.uid,
             paid: data?.paid,
+            payment_method: data?.method,
             registeredOn: moment().format(),
           });
           setConfirming(false);
