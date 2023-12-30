@@ -65,6 +65,7 @@ const Confirmation = () => {
           details: sessionDetails,
         });
         if (data?.message === "success") {
+          console.log(data);
           setDetails({
             ...details,
             uid: data?.uid,

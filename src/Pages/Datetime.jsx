@@ -19,7 +19,7 @@ const Datetime = () => {
   const scheduleState = schedule;
   let schedule_type = schedule?.type;
   schedule = schedule?.batches;
-  console.log(schedule);
+  // console.log(schedule);
 
   const [scheduleType, setScheduleType] = useState(null);
 
@@ -65,7 +65,11 @@ const Datetime = () => {
                       <button
                         disabled={time?.enrolled >= 15}
                         key={time?.time}
-                        className={`w-full p-2 flex flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${
+                        className={`w-full p-2 flex-row flex-wrap justify-center items-center border-2 border-indigo-700 rounded-md shadow-md text-[20px] font-[500] disabled:opacity-50 relative ${
+                          date?.date <= moment().format("YYYY-MM-DD")
+                            ? "hidden"
+                            : "flex"
+                        } ${
                           time?.time === details?.schedule?.time &&
                           date?.date === details?.schedule?.date
                             ? "bg-indigo-700 text-slate-200"

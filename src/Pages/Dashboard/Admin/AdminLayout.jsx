@@ -94,7 +94,7 @@ const AdminLayout = () => {
                 <img
                   src={BraveFavicon}
                   alt="Brave Logo"
-                  className="absolute bottom-3 left-3 w-[60%] z-[-1] opacity-20"
+                  className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[50%] z-[-1] opacity-10"
                 />
               </ul>
             </div>

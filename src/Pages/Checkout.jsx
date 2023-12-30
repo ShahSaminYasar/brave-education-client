@@ -36,7 +36,7 @@ const Checkout = () => {
     const fetchRegistrationDetails = async () => {
       if (details.uid) {
         // console.log("RD set from state");
-        console.log(details)
+        // console.log(details)
         setRegistrationDetails(details);
         setLoading(false);
       } else if (JSON.parse(sessionStorage.getItem("be_details_temp"))) {

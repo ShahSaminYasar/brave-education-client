@@ -117,8 +117,7 @@ const Details = () => {
                 name="phone"
                 type="number"
                 disabled={
-                  localStudentData?.phone ||
-                  JSON.parse(localStorage.getItem("be_student_temp"))?.phone
+                  localStudentData?.phone
                 }
                 defaultValue={
                   localStudentData?.phone ||
