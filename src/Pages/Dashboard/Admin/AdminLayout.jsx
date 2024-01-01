@@ -40,7 +40,7 @@ const AdminLayout = () => {
               ></label>
               <ul className="menu p-4 w-80 min-h-full bg-white text-[20px] 2xl:text-[24px] text-indigo-700 font-[500] relative">
                 {/* Sidebar content here */}
-                <Title>ADMIN</Title>
+                <Title><span className="font-[500] text-[40px] block mt-4 mb-2 text-[#282985]">ADMIN</span></Title>
                 <NavLink
                   to="/admin/registrations"
                   className={({ isActive }) =>

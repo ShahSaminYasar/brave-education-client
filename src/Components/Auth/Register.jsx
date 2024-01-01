@@ -71,7 +71,7 @@ const Register = ({ setAuthState }) => {
             Phone
           </label>
           <input
-            type="number"
+            type="tel"
             name="phone"
             placeholder="Phone"
             disabled={tempUser?.phone}

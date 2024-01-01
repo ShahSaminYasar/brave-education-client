@@ -158,7 +158,7 @@ const Checkout = () => {
       .setTextColor("navy")
       .text(`${registrationDetails?.paid ? "PAID" : "NOT PAID"}`, 15, 106)
       .setTextColor("darkslategray")
-      .text(`Payment method: ${registrationDetails?.payment_method?.toUpperCase()}`, 15, 112)
+      .text(`Payment method: ${payment_method?.toUpperCase()}`, 15, 112)
       .text("Thank you.", 15, 124)
       .setTextColor("red")
       .setFontSize(10)

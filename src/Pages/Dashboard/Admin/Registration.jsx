@@ -104,7 +104,7 @@ const Registration = ({ registration, refetch }) => {
           </span>
         </div>
       </td>
-      <td>
+      <td className="w-[130px]">
         <div className="flex flex-col gap-1">
           <span className="font-[600] text-indigo-900">
             {registration?.uid}

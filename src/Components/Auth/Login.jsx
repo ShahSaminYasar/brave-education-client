@@ -60,7 +60,7 @@ const Login = ({ setAuthState }) => {
           >
             <h1 className="text-[25px] text-red-500 block text-left">Login</h1>
             <input
-              type="number"
+              type="tel"
               className="w-full outline-none input input-bordered bg-white"
               placeholder="Phone"
               name="phone"

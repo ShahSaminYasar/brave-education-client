@@ -85,7 +85,7 @@ const Students = () => {
               {students?.map((student) => (
                 <div
                   key={student?.phone}
-                  className="w-fit flex flex-col gap-1 bg-white shadow-md p-5 border-2 border-red-500 rounded-md"
+                  className="w-full max-w-[400px] flex flex-col gap-1 bg-white shadow-md p-5 border-2 border-red-500 rounded-md"
                 >
                   <span className="font-[400]">
                     Name: <span className="font-[800]">{student?.name}</span>
@@ -93,7 +93,7 @@ const Students = () => {
                   <span className="font-[400]">
                     Phone: <span className="font-[800]">{student?.phone}</span>
                   </span>
-                  <span className="font-[400]">
+                  <span className="font-[400] max-w-[400px] overflow-x-auto">
                     Email: <span className="font-[800]">{student?.email}</span>
                   </span>
                   <span className="font-[400]">

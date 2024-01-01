@@ -110,22 +110,20 @@ const Details = () => {
                 htmlFor="phone"
                 className="text-[15px] text-slate-500 font-[400]"
               >
-                Phone
+                Phone {localStudentData?.phone && "(From your account)"}
               </label>
               <input
                 required
                 name="phone"
-                type="number"
-                disabled={
-                  localStudentData?.phone
-                }
+                type="tel"
+                disabled={localStudentData?.phone}
                 defaultValue={
                   localStudentData?.phone ||
                   JSON.parse(localStorage.getItem("be_student_temp"))?.phone ||
                   ""
                 }
                 placeholder="Your Active Phone Number"
-                className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6]"
+                className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 focus:border-[#4438caa6] disabled:bg-slate-200 disabled:text-slate-700 disabled:border-none disabled:outline-none"
               />
             </div>
             <div>

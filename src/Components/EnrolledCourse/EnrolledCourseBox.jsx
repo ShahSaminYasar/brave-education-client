@@ -91,7 +91,7 @@ const EnrolledCourseBox = ({ courseId, details }) => {
 
   return (
     <tr className="even:bg-slate-100 border-b-slate-200 font-[400]">
-      <td className="max-w-[130px]">
+      <td className="max-w-[230px]">
         <div className="flex flex-col gap-1">
           <span>
             Name: <span className="font-[600]">{details?.name}</span>
@@ -99,7 +99,7 @@ const EnrolledCourseBox = ({ courseId, details }) => {
           <span>
             Phone: <span className="font-[600]">{details?.phone}</span>
           </span>
-          <span>
+          <span className="w-full overflow-x-auto flex flex-row gap-1 overflow-y-hidden">
             Email: <span className="font-[600]">{details?.email}</span>
           </span>
           <span>
@@ -127,7 +127,7 @@ const EnrolledCourseBox = ({ courseId, details }) => {
                   {batchDetails?.name}
                 </span>
               </span>
-              <span className="block mb-1">
+              <span className="mb-1">
                 Schedule:{" "}
                 <span className="font-[600] text-indigo-900">
                   {batchDetails?.schedule}
@@ -152,7 +152,7 @@ const EnrolledCourseBox = ({ courseId, details }) => {
           </span>
         </span>
       </td>
-      <td>
+      <td className="w-[150px]">
         <span className="font-[600] text-indigo-900 block mb-1">
           ID: {details?.uid}
         </span>
