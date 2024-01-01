@@ -35,9 +35,9 @@ const Datetime = () => {
     setDetails({ ...details, schedule: { date: date, time } });
   };
 
-  const handleSelectBatch = (batchId, batchSchedule) => {
+  const handleSelectBatch = (batchId, batchSchedule, batchStartDate) => {
     sessionStorage.setItem("be_course_schedule", JSON.stringify(batchSchedule));
-    setDetails({ ...details, batch: batchId, batchSchedule });
+    setDetails({ ...details, batch: batchId, batchSchedule, batchStartDate });
   };
 
   return (
@@ -118,7 +118,13 @@ const Datetime = () => {
                       ? "bg-indigo-700 text-slate-200"
                       : "bg-white text-slate-800"
                   }`}
-                  onClick={() => handleSelectBatch(batch?.id, batch?.schedule)}
+                  onClick={() =>
+                    handleSelectBatch(
+                      batch?.id,
+                      batch?.schedule,
+                      batch?.duration
+                    )
+                  }
                 >
                   <span className="text-[20px] block text-center w-full">
                     {batch?.name}

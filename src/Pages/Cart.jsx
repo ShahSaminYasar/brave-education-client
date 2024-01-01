@@ -26,13 +26,19 @@ const Cart = () => {
               "An error occured, please try again."}
           </p>
         ) : (
-          <div className="flex flex-row justify-between items-start text-[14px] sm:text-[17px] 2xl:text-[20px] font-[500] w-full text-slate-800">
+          <div className="flex flex-col-reverse gap-5 sm:gap-1 sm:flex-row justify-between items-start text-[15px] sm:text-[17px] 2xl:text-[20px] font-[500] w-full text-slate-800">
             <div className="flex flex-col gap-2 justify-start items-start">
               <h3
                 className={`text-indigo-700 text-[25px] sm:text-[28px] font-[500]`}
               >
                 {courseDetails?.[0]?.name}
               </h3>
+              {details?.batchStartDate && (
+                <span>
+                  Batch starts from{" "}
+                  <span className="font-[800]">{details?.batchStartDate}</span>
+                </span>
+              )}
               <span>
                 Duration:{" "}
                 {courseDetails?.[0]?.duration >= 525600 // 365 days in minutes
@@ -111,7 +117,7 @@ const Cart = () => {
             <img
               src={courseDetails?.[0]?.thumbnail}
               alt="Course Thumbnail"
-              className="w-full max-w-[120px] sm:max-w-[200px] aspect-[16/12] object-cover rounded-md"
+              className="w-full max-w-[220px] block mx-auto sm:mx-0 sm:max-w-[200px] aspect-[16/12] object-cover rounded-md"
             />
           </div>
         )}
