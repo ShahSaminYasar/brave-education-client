@@ -38,6 +38,8 @@ const Confirmation = () => {
           course: details?.course,
           date: details?.schedule?.date,
           time: details?.schedule?.time,
+          speakingDate: details?.speakingSchedule?.date,
+          speakingTime: details?.speakingSchedule?.time,
           registeredOn: moment().format(),
           name: details?.student?.name,
           email: details?.student?.email,

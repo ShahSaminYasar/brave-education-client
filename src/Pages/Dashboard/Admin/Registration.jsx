@@ -84,16 +84,30 @@ const Registration = ({ registration, refetch }) => {
               </span>
             </span>
           ) : (
-            <span>
-              Schedule:{" "}
-              <span className="font-[600] text-indigo-900">
-                {registration?.time}
+            <>
+              <span>
+                Schedule:{" "}
+                <span className="font-[600] text-indigo-900">
+                  {registration?.time}
+                </span>
+                ,{" "}
+                <span className="font-[600] text-indigo-900">
+                  {moment(registration?.date).format("D MMM YYYY")}
+                </span>
               </span>
-              ,{" "}
-              <span className="font-[600] text-indigo-900">
-                {moment(registration?.date).format("D MMM YYYY")}
-              </span>
-            </span>
+              {registration?.speakingDate && (
+                <span>
+                  Speaking:{" "}
+                  <span className="font-[600] text-indigo-900">
+                    {registration?.speakingTime}
+                  </span>
+                  ,{" "}
+                  <span className="font-[600] text-indigo-900">
+                    {moment(registration?.speakingDate).format("D MMM YYYY")}
+                  </span>
+                </span>
+              )}
+            </>
           )}
           <span>
             Registered on:

@@ -5,6 +5,7 @@ import useBatch from "../../hooks/useBatch";
 import jsPDF from "jspdf";
 
 const EnrolledCourseBox = ({ courseId, details }) => {
+  // console.log(details);
   let course = useCourses(courseId);
   const courseState = course;
   course = course?.[0];
@@ -31,62 +32,195 @@ const EnrolledCourseBox = ({ courseId, details }) => {
 
   const handleDownloadInvoice = () => {
     const doc = new jsPDF("p", "mm", "a4");
-    doc
-      .setFontSize(25)
-      .setFont("Helvetica")
-      .setTextColor("black")
-      .text("BRAVE EDUCATION", 15, 20)
-      .setFontSize(12)
-      .text(
-        `Registration: ${moment(details?.registeredOn).format(
-          "DD MMMM YYYY [at] hh:mma"
-        )}`,
-        15,
-        30
-      )
-      .text(`${details?.batch ? "Course" : "Test"}: ${course?.name}`, 15, 40);
 
-    details?.batch
-      ? doc
-          .text(`Batch: ${batchDetails?.name}`, 15, 46)
-          .text(`Routine: ${batchDetails?.schedule}`, 15, 52)
-      : doc
-          .text(`Date: ${moment(details?.date).format("DD MMMM YYYY")}`, 15, 46)
-          .text(`Time: ${details?.time}`, 15, 52);
+    if (details?.speakingDate) {
+      doc
+        .setFontSize(25)
+        .setFont("Helvetica")
+        .setTextColor("black")
+        .text("BRAVE EDUCATION", 15, 20)
+        .setFontSize(12)
+        .text(
+          `Registration: ${moment(details?.registeredOn).format(
+            "DD MMMM YYYY [at] hh:mma"
+          )}`,
+          15,
+          30
+        )
+        .text(`${details?.batch ? "Course" : "Test"}: ${course?.name}`, 15, 40);
 
-    doc
-      .text(`Name: ${details?.name}`, 15, 62)
-      .text(`Phone: ${details?.phone}`, 15, 68)
-      .text(`Email: ${details?.email}`, 15, 74)
-      .text(`Gender: ${details?.gender}`, 15, 80)
-      .setFontSize(14)
-      .setTextColor("orangered")
-      .setFillColor("yellow")
-      .text(`ID: ${details?.uid}`, 15, 90)
-      .setFontSize(12)
-      .setFillColor("white")
-      .setTextColor("black")
-      .text(`Price: Tk. ${course?.offerPrice}`, 15, 100)
-      .setTextColor("navy")
-      .text(`${details?.paid ? "PAID" : "NOT PAID"}`, 15, 106)
-      .setTextColor("darkslategray")
-      .text(
-        `Payment method: ${details?.payment_method?.toUpperCase()}`,
-        15,
-        112
-      )
-      .text("Thank you.", 15, 124)
-      .setTextColor("red")
-      .setFontSize(10)
-      .text("Hotline: 01937-805552", 15, 128)
-      .setTextColor("darkslateblue")
-      .text(
-        "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
-        15,
-        132
-      );
-    // Save the PDF
-    doc.save(`Invoice_${details?.uid || "BE"}.pdf`);
+      details?.batch
+        ? doc
+            .text(`Batch: ${batchDetails?.name}`, 15, 46)
+            .text(`Routine: ${batchDetails?.schedule}`, 15, 52)
+        : doc
+            .text(
+              `Mock test date: ${moment(details?.date).format("DD MMMM YYYY")}`,
+              15,
+              46
+            )
+            .text(`Mock test time: ${details?.time}`, 15, 52)
+            .text(
+              `Speaking test date: ${moment(details?.speakingDate).format(
+                "DD MMMM YYYY"
+              )}`,
+              15,
+              60
+            )
+            .text(`Speaking test time: ${details?.speakingTime}`, 15, 66);
+
+      doc
+        .text(`Name: ${details?.name}`, 15, 76)
+        .text(`Phone: ${details?.phone}`, 15, 82)
+        .text(`Email: ${details?.email}`, 15, 88)
+        .text(`Gender: ${details?.gender}`, 15, 94)
+        .setFontSize(14)
+        .setTextColor("orangered")
+        .setFillColor("yellow")
+        .text(`ID: ${details?.uid}`, 15, 104)
+        .setFontSize(12)
+        .setFillColor("white")
+        .setTextColor("black")
+        .text(`Price: Tk. ${course?.offerPrice}`, 15, 114)
+        .setTextColor("navy")
+        .text(`${details?.paid ? "PAID" : "NOT PAID"}`, 15, 120)
+        .setTextColor("darkslategray")
+        .text(
+          `Payment method: ${details?.payment_method?.toUpperCase()}`,
+          15,
+          126
+        )
+        .text("Thank you.", 15, 130)
+        .setTextColor("red")
+        .setFontSize(10)
+        .text("Hotline: 01937-805552", 15, 134)
+        .setTextColor("darkslateblue")
+        .text(
+          "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
+          15,
+          138
+        );
+      // Save the PDF
+      doc.save(`Invoice_${details?.uid || "BE"}.pdf`);
+    } else {
+      doc
+        .setFontSize(25)
+        .setFont("Helvetica")
+        .setTextColor("black")
+        .text("BRAVE EDUCATION", 15, 20)
+        .setFontSize(12)
+        .text(
+          `Registration: ${moment(details?.registeredOn).format(
+            "DD MMMM YYYY [at] hh:mma"
+          )}`,
+          15,
+          30
+        )
+        .text(`${details?.batch ? "Course" : "Test"}: ${course?.name}`, 15, 40);
+
+      details?.batch
+        ? doc
+            .text(`Batch: ${batchDetails?.name}`, 15, 46)
+            .text(`Routine: ${batchDetails?.schedule}`, 15, 52)
+        : doc
+            .text(
+              `Date: ${moment(details?.date).format("DD MMMM YYYY")}`,
+              15,
+              46
+            )
+            .text(`Time: ${details?.time}`, 15, 52);
+
+      doc
+        .text(`Name: ${details?.name}`, 15, 62)
+        .text(`Phone: ${details?.phone}`, 15, 68)
+        .text(`Email: ${details?.email}`, 15, 74)
+        .text(`Gender: ${details?.gender}`, 15, 80)
+        .setFontSize(14)
+        .setTextColor("orangered")
+        .setFillColor("yellow")
+        .text(`ID: ${details?.uid}`, 15, 90)
+        .setFontSize(12)
+        .setFillColor("white")
+        .setTextColor("black")
+        .text(`Price: Tk. ${course?.offerPrice}`, 15, 100)
+        .setTextColor("navy")
+        .text(`${details?.paid ? "PAID" : "NOT PAID"}`, 15, 106)
+        .setTextColor("darkslategray")
+        .text(
+          `Payment method: ${details?.payment_method?.toUpperCase()}`,
+          15,
+          112
+        )
+        .text("Thank you.", 15, 124)
+        .setTextColor("red")
+        .setFontSize(10)
+        .text("Hotline: 01937-805552", 15, 128)
+        .setTextColor("darkslateblue")
+        .text(
+          "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
+          15,
+          132
+        );
+      // Save the PDF
+      doc.save(`Invoice_${details?.uid || "BE"}.pdf`);
+    }
+
+    // doc
+    //   .setFontSize(25)
+    //   .setFont("Helvetica")
+    //   .setTextColor("black")
+    //   .text("BRAVE EDUCATION", 15, 20)
+    //   .setFontSize(12)
+    //   .text(
+    //     `Registration: ${moment(details?.registeredOn).format(
+    //       "DD MMMM YYYY [at] hh:mma"
+    //     )}`,
+    //     15,
+    //     30
+    //   )
+    //   .text(`${details?.batch ? "Course" : "Test"}: ${course?.name}`, 15, 40);
+
+    // details?.batch
+    //   ? doc
+    //       .text(`Batch: ${batchDetails?.name}`, 15, 46)
+    //       .text(`Routine: ${batchDetails?.schedule}`, 15, 52)
+    //   : doc
+    //       .text(`Date: ${moment(details?.date).format("DD MMMM YYYY")}`, 15, 46)
+    //       .text(`Time: ${details?.time}`, 15, 52);
+
+    // doc
+    //   .text(`Name: ${details?.name}`, 15, 62)
+    //   .text(`Phone: ${details?.phone}`, 15, 68)
+    //   .text(`Email: ${details?.email}`, 15, 74)
+    //   .text(`Gender: ${details?.gender}`, 15, 80)
+    //   .setFontSize(14)
+    //   .setTextColor("orangered")
+    //   .setFillColor("yellow")
+    //   .text(`ID: ${details?.uid}`, 15, 90)
+    //   .setFontSize(12)
+    //   .setFillColor("white")
+    //   .setTextColor("black")
+    //   .text(`Price: Tk. ${course?.offerPrice}`, 15, 100)
+    //   .setTextColor("navy")
+    //   .text(`${details?.paid ? "PAID" : "NOT PAID"}`, 15, 106)
+    //   .setTextColor("darkslategray")
+    //   .text(
+    //     `Payment method: ${details?.payment_method?.toUpperCase()}`,
+    //     15,
+    //     112
+    //   )
+    //   .text("Thank you.", 15, 124)
+    //   .setTextColor("red")
+    //   .setFontSize(10)
+    //   .text("Hotline: 01937-805552", 15, 128)
+    //   .setTextColor("darkslateblue")
+    //   .text(
+    //     "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
+    //     15,
+    //     132
+    //   );
+    // // Save the PDF
+    // doc.save(`Invoice_${details?.uid || "BE"}.pdf`);
   };
 
   return (
@@ -136,13 +270,31 @@ const EnrolledCourseBox = ({ courseId, details }) => {
             </div>
           )
         ) : (
-          <span className="mb-1 block">
-            Schedule:{" "}
-            <span className="font-[600] text-indigo-900">{details?.time}</span>,{" "}
-            <span className="font-[600] text-indigo-900">
-              {moment(details?.date).format("D MMM YYYY")}
+          <>
+            <span className="mb-1 block">
+              Schedule:{" "}
+              <span className="font-[600] text-indigo-900">
+                {details?.time}
+              </span>
+              ,{" "}
+              <span className="font-[600] text-indigo-900">
+                {moment(details?.date).format("D MMM YYYY")}
+              </span>
             </span>
-          </span>
+
+            {details?.speakingDate && (
+              <span className="mb-1 block">
+                Speaking:{" "}
+                <span className="font-[600] text-indigo-900">
+                  {details?.speakingTime}
+                </span>
+                ,{" "}
+                <span className="font-[600] text-indigo-900">
+                  {moment(details?.speakingDate).format("D MMM YYYY")}
+                </span>
+              </span>
+            )}
+          </>
         )}
         <span>
           Registered on:

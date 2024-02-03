@@ -107,70 +107,154 @@ const Checkout = () => {
 
   const handleDownloadInvoice = () => {
     const doc = new jsPDF("p", "mm", "a4");
-    doc
-      .setFontSize(25)
-      .setFont("Helvetica")
-      .setTextColor("black")
-      .text("BRAVE EDUCATION", 15, 20)
-      .setFontSize(12)
-      .text(
-        `Registration: ${moment(registrationDetails?.registeredOn).format(
-          "DD MMMM YYYY [at] hh:mma"
-        )}`,
-        15,
-        30
-      )
-      .text(
-        `${registrationDetails?.batch ? "Course" : "Test"}: ${
-          courseDetails?.[0]?.name
-        }`,
-        15,
-        40
-      );
 
-    registrationDetails?.batch
-      ? doc
-          .text(`Batch: ${batchDetails?.name}`, 15, 46)
-          .text(`Routine: ${batchDetails?.schedule}`, 15, 52)
-      : doc
-          .text(
-            `Date: ${moment(registrationDetails?.schedule?.date).format(
-              "DD MMMM YYYY"
-            )}`,
-            15,
-            46
-          )
-          .text(`Time: ${registrationDetails?.schedule?.time}`, 15, 52);
+    if (registrationDetails?.speakingSchedule) {
+      doc
+        .setFontSize(25)
+        .setFont("Helvetica")
+        .setTextColor("black")
+        .text("BRAVE EDUCATION", 15, 20)
+        .setFontSize(12)
+        .text(
+          `Registration: ${moment(registrationDetails?.registeredOn).format(
+            "DD MMMM YYYY [at] hh:mma"
+          )}`,
+          15,
+          30
+        )
+        .text(
+          `${registrationDetails?.batch ? "Course" : "Test"}: ${
+            courseDetails?.[0]?.name
+          }`,
+          15,
+          40
+        );
 
-    doc
-      .text(`Name: ${registrationDetails?.student?.name}`, 15, 62)
-      .text(`Phone: ${registrationDetails?.student?.phone}`, 15, 68)
-      .text(`Email: ${registrationDetails?.student?.email}`, 15, 74)
-      .text(`Gender: ${registrationDetails?.student?.gender}`, 15, 80)
-      .setFontSize(14)
-      .setTextColor("orangered")
-      .setFillColor("yellow")
-      .text(`ID: ${registrationDetails?.uid}`, 15, 90)
-      .setFontSize(12)
-      .setFillColor("white")
-      .setTextColor("black")
-      .text(`Price: Tk. ${courseDetails?.[0]?.offerPrice}`, 15, 100)
-      .setTextColor("navy")
-      .text(`${registrationDetails?.paid ? "PAID" : "NOT PAID"}`, 15, 106)
-      .setTextColor("darkslategray")
-      .text(`Payment method: ${payment_method?.toUpperCase()}`, 15, 112)
-      .text("Thank you.", 15, 124)
-      .setTextColor("red")
-      .setFontSize(10)
-      .text("Hotline: 01937-805552", 15, 128)
-      .setTextColor("darkslateblue")
-      .text(
-        "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
-        15,
-        132
-      );
-    // Save the PDF
-    doc.save(`Invoice_${registrationDetails?.uid || "BE"}.pdf`);
+      registrationDetails?.batch
+        ? doc
+            .text(`Batch: ${batchDetails?.name}`, 15, 46)
+            .text(`Routine: ${batchDetails?.schedule}`, 15, 52)
+        : doc
+            .text(
+              `Mock test date: ${moment(
+                registrationDetails?.schedule?.date
+              ).format("DD MMMM YYYY")}`,
+              15,
+              46
+            )
+            .text(
+              `Mock test time: ${registrationDetails?.schedule?.time}`,
+              15,
+              52
+            )
+            .text(
+              `Speaking test date: ${moment(
+                registrationDetails?.speakingSchedule?.date
+              ).format("DD MMMM YYYY")}`,
+              15,
+              60
+            )
+            .text(
+              `Speaking test time: ${registrationDetails?.speakingSchedule?.time}`,
+              15,
+              66
+            );
+
+      doc
+        .text(`Name: ${registrationDetails?.student?.name}`, 15, 76)
+        .text(`Phone: ${registrationDetails?.student?.phone}`, 15, 82)
+        .text(`Email: ${registrationDetails?.student?.email}`, 15, 88)
+        .text(`Gender: ${registrationDetails?.student?.gender}`, 15, 94)
+        .setFontSize(14)
+        .setTextColor("orangered")
+        .setFillColor("yellow")
+        .text(`ID: ${registrationDetails?.uid}`, 15, 104)
+        .setFontSize(12)
+        .setFillColor("white")
+        .setTextColor("black")
+        .text(`Price: Tk. ${courseDetails?.[0]?.offerPrice}`, 15, 114)
+        .setTextColor("navy")
+        .text(`${registrationDetails?.paid ? "PAID" : "NOT PAID"}`, 15, 120)
+        .setTextColor("darkslategray")
+        .text(`Payment method: ${payment_method?.toUpperCase()}`, 15, 126)
+        .text("Thank you.", 15, 130)
+        .setTextColor("red")
+        .setFontSize(10)
+        .text("Hotline: 01937-805552", 15, 134)
+        .setTextColor("darkslateblue")
+        .text(
+          "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
+          15,
+          138
+        );
+      // Save the PDF
+      doc.save(`Invoice_${registrationDetails?.uid || "BE"}.pdf`);
+    } else {
+      doc
+        .setFontSize(25)
+        .setFont("Helvetica")
+        .setTextColor("black")
+        .text("BRAVE EDUCATION", 15, 20)
+        .setFontSize(12)
+        .text(
+          `Registration: ${moment(registrationDetails?.registeredOn).format(
+            "DD MMMM YYYY [at] hh:mma"
+          )}`,
+          15,
+          30
+        )
+        .text(
+          `${registrationDetails?.batch ? "Course" : "Test"}: ${
+            courseDetails?.[0]?.name
+          }`,
+          15,
+          40
+        );
+
+      registrationDetails?.batch
+        ? doc
+            .text(`Batch: ${batchDetails?.name}`, 15, 46)
+            .text(`Routine: ${batchDetails?.schedule}`, 15, 52)
+        : doc
+            .text(
+              `Date: ${moment(registrationDetails?.schedule?.date).format(
+                "DD MMMM YYYY"
+              )}`,
+              15,
+              46
+            )
+            .text(`Time: ${registrationDetails?.schedule?.time}`, 15, 52);
+
+      doc
+        .text(`Name: ${registrationDetails?.student?.name}`, 15, 62)
+        .text(`Phone: ${registrationDetails?.student?.phone}`, 15, 68)
+        .text(`Email: ${registrationDetails?.student?.email}`, 15, 74)
+        .text(`Gender: ${registrationDetails?.student?.gender}`, 15, 80)
+        .setFontSize(14)
+        .setTextColor("orangered")
+        .setFillColor("yellow")
+        .text(`ID: ${registrationDetails?.uid}`, 15, 90)
+        .setFontSize(12)
+        .setFillColor("white")
+        .setTextColor("black")
+        .text(`Price: Tk. ${courseDetails?.[0]?.offerPrice}`, 15, 100)
+        .setTextColor("navy")
+        .text(`${registrationDetails?.paid ? "PAID" : "NOT PAID"}`, 15, 106)
+        .setTextColor("darkslategray")
+        .text(`Payment method: ${payment_method?.toUpperCase()}`, 15, 112)
+        .text("Thank you.", 15, 124)
+        .setTextColor("red")
+        .setFontSize(10)
+        .text("Hotline: 01937-805552", 15, 128)
+        .setTextColor("darkslateblue")
+        .text(
+          "Address: House No. 05, 1st floor, Block-C (Main Road), Shahjalal Upashahar Main Road, Sylhet 3100",
+          15,
+          132
+        );
+      // Save the PDF
+      doc.save(`Invoice_${registrationDetails?.uid || "BE"}.pdf`);
+    }
   };
 
   return (
@@ -224,18 +308,37 @@ const Checkout = () => {
                     </p>
                     <div className="flex flex-col gap-2 justify-start items-start">
                       {registrationDetails?.schedule ? (
-                        <p className="block text-center w-full">
-                          We expect your presence at{" "}
-                          <span className="text-indigo-700 font-[600]">
-                            {registrationDetails?.schedule?.time}
-                          </span>{" "}
-                          on{" "}
-                          <span className="text-indigo-800 font-[600]">
-                            {moment(registrationDetails?.schedule?.date).format(
-                              "D MMMM YYYY"
-                            )}
-                          </span>
-                        </p>
+                        <>
+                          <p className="block text-center w-full">
+                            {registrationDetails?.speakingSchedule
+                              ? "Mock test"
+                              : "We expect your presence "}{" "}
+                            at{" "}
+                            <span className="text-indigo-700 font-[600]">
+                              {registrationDetails?.schedule?.time}
+                            </span>{" "}
+                            on{" "}
+                            <span className="text-indigo-800 font-[600]">
+                              {moment(
+                                registrationDetails?.schedule?.date
+                              ).format("D MMMM YYYY")}
+                            </span>
+                          </p>
+                          {registrationDetails?.speakingSchedule && (
+                            <p className="block text-center -mt-[10px] w-full">
+                              Speaking test at{" "}
+                              <span className="text-indigo-700 font-[600]">
+                                {registrationDetails?.speakingSchedule?.time}
+                              </span>{" "}
+                              on{" "}
+                              <span className="text-indigo-800 font-[600]">
+                                {moment(
+                                  registrationDetails?.speakingSchedule?.date
+                                ).format("D MMMM YYYY")}
+                              </span>
+                            </p>
+                          )}
+                        </>
                       ) : (
                         <p className="block text-center w-full bg-slate-50 rounded-md p-2 shadow-sm border-2 border-white text-indigo-700">
                           Routine: {registrationDetails?.batchSchedule}

@@ -72,16 +72,32 @@ const Cart = () => {
                   : `${courseDetails?.[0]?.duration} Minutes`}
               </span>
               {courseDetails?.[0]?.type === "test" ? (
-                <span>
-                  Schedule:{" "}
-                  <span className="text-indigo-700 font-[600]">
-                    {moment(details?.schedule?.date).format("D MMMM YYYY")}
-                  </span>{" "}
-                  at{" "}
-                  <span className="text-indigo-700 font-[600]">
-                    {details?.schedule?.time}
+                <>
+                  <span>
+                    Schedule:{" "}
+                    <span className="text-indigo-700 font-[600]">
+                      {moment(details?.schedule?.date).format("D MMMM YYYY")}
+                    </span>{" "}
+                    at{" "}
+                    <span className="text-indigo-700 font-[600]">
+                      {details?.schedule?.time}
+                    </span>
                   </span>
-                </span>
+                  {details?.speakingSchedule && (
+                    <span>
+                      Speaking schedule:{" "}
+                      <span className="text-indigo-700 font-[600]">
+                        {moment(details?.speakingSchedule?.date).format(
+                          "D MMMM YYYY"
+                        )}
+                      </span>{" "}
+                      at{" "}
+                      <span className="text-indigo-700 font-[600]">
+                        {details?.speakingSchedule?.time}
+                      </span>
+                    </span>
+                  )}
+                </>
               ) : (
                 "Routine: " + details?.batchSchedule
               )}

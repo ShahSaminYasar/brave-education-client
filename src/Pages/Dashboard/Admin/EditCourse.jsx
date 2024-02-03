@@ -24,16 +24,28 @@ const EditCourse = () => {
 
   const [updating, setUpdating] = useState(false);
   const [dateValue, setDateValue] = useState();
+  const [speakingDateValue, setSpeakingDateValue] = useState();
+  const [speakingMockDateValue, setSpeakingMockDateValue] = useState();
   const [schedule, setSchedule] = useState(course?.schedule);
+  const [speakingSchedule, setSpeakingSchedule] = useState(
+    course?.speakingSchedule || []
+  );
   const [serviceType, setServiceType] = useState(course?.type);
   const [batches, setBatches] = useState(course?.batches);
   const [selectedBatch, setSelectedBatch] = useState(null);
   const [focusedBatch, setFocusedBatch] = useState(null);
+  const [isIELTSMockTest, setIsIELTSMockTest] = useState(false);
 
   useEffect(() => {
     setSchedule(course?.schedule);
     setServiceType(course?.type);
     setBatches(course?.batches);
+    if (course?.name === "IELTS Mock Test") {
+      setIsIELTSMockTest(true);
+      setSpeakingSchedule(course?.speakingSchedule || []);
+    } else {
+      setIsIELTSMockTest(false);
+    }
   }, [course]);
 
   if (courseState?.isLoading) {
@@ -56,12 +68,42 @@ const EditCourse = () => {
     setSchedule([...schedule, dateObject]);
   };
 
+  const handleAddSpeakingDate = () => {
+    if (!speakingDateValue || !speakingMockDateValue) {
+      return toast("Both mock and test dates are required.");
+    }
+    const check = speakingSchedule?.find(
+      (shift) =>
+        shift?.mockDate === speakingMockDateValue &&
+        shift?.speakingDate === speakingDateValue
+    );
+    if (check) {
+      return toast("Speaking date for this mock has already been added");
+    } else if (!speakingDateValue) {
+      return toast("A date is required");
+    }
+    const dateObject = {
+      mockDate: speakingMockDateValue,
+      speakingDate: speakingDateValue,
+      times: [],
+    };
+    setSpeakingSchedule([...speakingSchedule, dateObject]);
+  };
+
   const handleRemoveDate = (index) => {
     const updatedSchedule = [
       ...schedule.slice(0, index),
       ...schedule.slice(index + 1),
     ];
     setSchedule(updatedSchedule);
+  };
+
+  const handleRemoveSpeakingDate = (index) => {
+    const updatedSchedule = [
+      ...speakingSchedule.slice(0, index),
+      ...speakingSchedule.slice(index + 1),
+    ];
+    setSpeakingSchedule(updatedSchedule);
   };
 
   const handleAddTime = (date, times) => {
@@ -71,6 +113,15 @@ const EditCourse = () => {
     let updatedSchedule = schedule;
     updatedSchedule[date].times = timesArray;
     setSchedule(updatedSchedule);
+  };
+
+  const handleAddSpeakingTime = (dateIndex, times) => {
+    const timesArray = times
+      ?.split(",")
+      ?.map((time) => ({ time: time?.trim(), enrolled: 0 }));
+    let updatedSchedule = speakingSchedule;
+    updatedSchedule[dateIndex].times = timesArray;
+    setSpeakingSchedule(updatedSchedule);
   };
 
   const handleAddBatch = () => {
@@ -101,7 +152,7 @@ const EditCourse = () => {
     // console.log(updatedBatchesArray);
   };
 
-  const handleAddCourse = async (e) => {
+  const handleEditCourse = async (e) => {
     e.preventDefault();
     setUpdating(true);
     const form = e.target;
@@ -136,7 +187,19 @@ const EditCourse = () => {
       }
     }
     let data;
-    if (serviceType === "test") {
+    if (serviceType === "test" && isIELTSMockTest) {
+      data = {
+        name: name?.value,
+        type: serviceType,
+        duration: parseInt(duration?.value),
+        price: parseInt(price?.value),
+        offerPrice: parseInt(offerPrice?.value),
+        active: Boolean(status?.value),
+        thumbnail: thumbnail_url,
+        schedule,
+        speakingSchedule,
+      };
+    } else if (serviceType === "test" && !isIELTSMockTest) {
       data = {
         name: name?.value,
         type: serviceType,
@@ -163,6 +226,7 @@ const EditCourse = () => {
       return;
     }
     try {
+      console.log("FINAL DATA: ", data);
       const response = await axiosSecure.put("/courses", {
         courseId,
         data,
@@ -193,7 +257,7 @@ const EditCourse = () => {
         <title>Edit Course | Brave Education</title>
       </Helmet>
       <form
-        onSubmit={handleAddCourse}
+        onSubmit={handleEditCourse}
         className="w-full max-w-[500px] mx-auto flex flex-col gap-3"
       >
         <Title className="mb-[0px]">Edit Course</Title>
@@ -209,6 +273,13 @@ const EditCourse = () => {
             name="name"
             type="text"
             defaultValue={course?.name}
+            onChange={(e) => {
+              if (e.target.value === "IELTS Mock Test") {
+                setIsIELTSMockTest(true);
+              } else {
+                setIsIELTSMockTest(false);
+              }
+            }}
             placeholder="Name of the course/test"
             className="input input-bordered text-[17px] 2xl:text-[20px] font-[400] text-slate-800 bg-white w-full shadow-sm border-2 border-indigo-300 focus:border-[#4438caa6]"
           />
@@ -399,6 +470,104 @@ const EditCourse = () => {
                 Add Date
               </button>
             </div>
+            {isIELTSMockTest && (
+              <>
+                <label
+                  htmlFor="schedule"
+                  className="block mt-5 text-[15px] text-slate-500 font-[400]"
+                >
+                  Speaking Schedule
+                </label>
+                {speakingSchedule?.map((date) => (
+                  <div
+                    key={`${date?.mockDate}${date?.speakingDate}`}
+                    className="flex flex-row justify-end text-[15px] text-slate-800 mb-1"
+                  >
+                    <div className="w-full flex items-center flex-row border-[1px] border-indigo-200 rounded-l-md overflow-hidden">
+                      <span className="text-[14px] bg-indigo-500 py-2 px-1 text-white w-[150px] text-center">
+                        {date?.mockDate}
+                      </span>
+                      <span className="text-[14px] bg-rose-500 py-2 px-1 text-white w-[150px] text-center">
+                        {date?.speakingDate}
+                      </span>
+                      <input
+                        type="text"
+                        defaultValue={date?.times?.map(
+                          (time) => `${time?.time}`
+                        )}
+                        onBlur={(e) =>
+                          handleAddSpeakingTime(
+                            speakingSchedule.indexOf(date),
+                            e.target.value
+                          )
+                        }
+                        className="bg-white p-2 w-full border-none outline-none"
+                        placeholder="00:00AM, 10:30AM, 12:00PM, 06:45PM..."
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleRemoveSpeakingDate(speakingSchedule.indexOf(date))
+                      }
+                      className="text-[17px] text-white bg-rose-500 rounded-sm overflow-hidden px-2"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                ))}
+                <div className="flex flex-col items-center gap-2 w-full mx-auto mt-3">
+                  {schedule?.length > 0 ? (
+                    <div className="flex flex-col gap-1 items-center">
+                      <label
+                        htmlFor="schedule"
+                        className="text-[15px] text-slate-700 font-[400]"
+                      >
+                        Mock test date
+                      </label>
+                      <select
+                        name="speaking_date"
+                        className="select select-bordered select-md"
+                        onChange={(e) =>
+                          setSpeakingMockDateValue(e.target.value)
+                        }
+                      >
+                        <option value="">Select a mock-test date</option>
+                        {schedule?.map((date) => (
+                          <option key={date?.date} value={date?.date}>
+                            {date?.date}
+                          </option>
+                        ))}
+                      </select>
+                      <label
+                        htmlFor="schedule"
+                        className="text-[15px] block mt-3 text-slate-700 font-[400]"
+                      >
+                        Speaking test date
+                      </label>
+                      <Calendar
+                        minDate={new Date()}
+                        value={speakingDateValue}
+                        onChange={(value) =>
+                          setSpeakingDateValue(
+                            moment(value).format("YYYY-MM-DD")
+                          )
+                        }
+                      />
+                    </div>
+                  ) : (
+                    "Please add a mock-test date above."
+                  )}
+                  <button
+                    type="button"
+                    onClick={handleAddSpeakingDate}
+                    className="btn btn-sm bg-blue-950 text-white font-[300] text"
+                  >
+                    Add Date
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <div className="">
