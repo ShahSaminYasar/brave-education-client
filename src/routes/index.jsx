@@ -12,6 +12,9 @@ import AddStudent from "../Pages/Dashboard/Admin/AddStudent";
 import AdminRoute from "./AdminRoute";
 import Students from "../Pages/Dashboard/Admin/Students";
 import Error from "../Pages/Error";
+import MockResult from "../Pages/MockResult/MockResult";
+import PublishMockResult from "../Pages/Dashboard/Admin/PublishMockResult";
+import MockResults from "../Pages/Dashboard/Admin/MockResults";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +23,10 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/mock-result",
+    element: <MockResult />,
   },
   {
     path: "/checkout",
@@ -64,6 +71,14 @@ export const router = createBrowserRouter([
       {
         path: "students",
         element: <Students />,
+      },
+      {
+        path: "publish-mock-result",
+        element: <PublishMockResult />,
+      },
+      {
+        path: "mock-results",
+        element: <MockResults />,
       },
     ],
   },

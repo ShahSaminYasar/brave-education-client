@@ -95,6 +95,26 @@ const AdminLayout = () => {
                 >
                   Students
                 </NavLink>
+                <NavLink
+                  to="/admin/publish-mock-result"
+                  className={({ isActive }) =>
+                    `block w-full py-3 border-b-[2px] border-b-indigo-100 hover:text-rose-600 ${
+                      isActive ? "text-rose-600" : "text-indigo-700"
+                    }`
+                  }
+                >
+                  Publish Mock Result
+                </NavLink>
+                <NavLink
+                  to="/admin/mock-results"
+                  className={({ isActive }) =>
+                    `block w-full py-3 border-b-[2px] border-b-indigo-100 hover:text-rose-600 ${
+                      isActive ? "text-rose-600" : "text-indigo-700"
+                    }`
+                  }
+                >
+                  All Mock Results
+                </NavLink>
                 <button
                   onClick={() => {
                     localStorage.removeItem("be_admin");
