@@ -8,6 +8,8 @@ import {
   FaMicrophone,
 } from "react-icons/fa6";
 import Header from "../../Components/Header";
+import MockHeader from "./MockHeader";
+import { Helmet } from "react-helmet";
 
 const MockResult = () => {
   const [step, setStep] = useState(1);
@@ -35,6 +37,23 @@ const MockResult = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Brave Education BD | IELTS Mock Test Result</title>
+        <meta name="title" content="Brave Education BD | IELTS Mock Test" />
+        <meta
+          name="description"
+          content="Get your IELTS mock test results with Brave Educationbd! Track your progress and identify areas for improvement to enhance your performance for the real exam."
+        />
+        <meta
+          name="keywords"
+          content="Get your Mock results,Brave Education BD | IELTS Mock Test,ielts result "
+        />
+        <meta name="robots" content="index, follow" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="English" />
+        <meta name="author" content="Brave Education BD" />
+      </Helmet>
+      <MockHeader />
       <section className="w-full min-h-screen bg-[#211D51] py-10 px-3 flex flex-col items-center gap-10 justify-center">
         {step == 1 ? (
           <>
@@ -45,7 +64,7 @@ const MockResult = () => {
               className="flex flex-col gap-5"
               onSubmit={(e) => checkResult(e)}
             >
-              <div className="flex flex-row gap-7 flex-wrap justify-center">
+              <div className="flex flex-row gap-x-7 gap-y-3 flex-wrap justify-center">
                 <div className="flex flex-col gap-1 justify-start">
                   <span className="text-white text-md font-semibold">
                     ID/Phone Number
@@ -55,7 +74,7 @@ const MockResult = () => {
                     placeholder="ID/Phone Number"
                     name="id"
                     required
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered min-w-[280px]"
                   />
                 </div>
 
@@ -68,13 +87,13 @@ const MockResult = () => {
                     placeholder="Test Date"
                     name="date"
                     required
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered min-w-[280px]"
                   />
                 </div>
               </div>
               <button
                 type="submit"
-                className="btn bg-red-600 text-white border-0"
+                className="btn bg-red-600 text-white border-0 "
               >
                 Check
               </button>

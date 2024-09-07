@@ -13,7 +13,20 @@ const App = () => {
   return (
     <>
       <Helmet>
-        <title>Enroll | Brave Education</title>
+        <title>Brave Education BD | Register</title>
+        <meta name="title" content="Brave Education BD | Register" />
+        <meta
+          name="description"
+          content="Boost your skills with Brave Educationbd! Join our Mock Test, IELTS ,Spoken English, and Exam Registration services for a brighter academic future."
+        />
+        <meta
+          name="keywords"
+          content="Brave Education BD | Register,IELTS Mock Test,Spoken English,EXAM registration,IELTS"
+        />
+        <meta name="robots" content="index, follow" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="English" />
+        <meta name="author" content="Brave Education BD" />
       </Helmet>
       <Header />
       <main className="bg-transparent flex flex-col justify-center items-center py-5 text-[17px] 2xl:text-[20px] px-3">
