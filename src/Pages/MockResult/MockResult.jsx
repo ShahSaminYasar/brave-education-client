@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import moment from "moment";
 import {
@@ -7,13 +7,14 @@ import {
   FaPencil,
   FaMicrophone,
 } from "react-icons/fa6";
-import Header from "../../Components/Header";
 import MockHeader from "./MockHeader";
 import { Helmet } from "react-helmet";
+import toast from "react-hot-toast";
 
 const MockResult = () => {
   const [step, setStep] = useState(1);
   const [result, setResult] = useState();
+  const [loading, setLoading] = useState(false);
   const axios = useAxios();
 
   const checkResult = async (e) => {
@@ -22,6 +23,8 @@ const MockResult = () => {
     const id = e.target.id.value;
     const date = moment(e.target.date.value).format("DD-MM-YYYY");
 
+    setLoading(true);
+
     const res = await axios.get(`/mock-result?id=${id}&date=${date}`);
     if (res?.data?.message === "success") {
       setResult(res?.data?.result);
@@ -29,6 +32,8 @@ const MockResult = () => {
     } else {
       return toast.error(res?.data?.message || "Failed, please retry");
     }
+
+    setLoading(false);
   };
 
   const reset = () => {
@@ -49,7 +54,7 @@ const MockResult = () => {
           content="Get your Mock results,Brave Education BD | IELTS Mock Test,ielts result "
         />
         <meta name="robots" content="index, follow" />
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="English" />
         <meta name="author" content="Brave Education BD" />
       </Helmet>
@@ -74,7 +79,7 @@ const MockResult = () => {
                     placeholder="ID/Phone Number"
                     name="id"
                     required
-                    className="input input-bordered min-w-[280px]"
+                    className="input input-bordered font-semibold min-w-[280px] bg-white text-slate-900"
                   />
                 </div>
 
@@ -84,18 +89,18 @@ const MockResult = () => {
                   </span>
                   <input
                     type="date"
-                    placeholder="Test Date"
                     name="date"
                     required
-                    className="input input-bordered min-w-[280px]"
+                    className="input input-bordered min-w-[280px] bg-white text-slate-900"
                   />
                 </div>
               </div>
               <button
                 type="submit"
-                className="btn bg-red-600 text-white border-0 "
+                className="btn bg-red-600 text-white border-0 disabled:opacity-80"
+                disabled={loading}
               >
-                Check
+                {loading ? "Loading..." : "Check Result"}
               </button>
             </form>
           </>
@@ -114,10 +119,10 @@ const MockResult = () => {
                 <span className="text-white font-bold text-xl lg:text-3xl block w-full text-left mb-5">
                   Test date:{" "}
                   <span className="text-red-600">
-                    {moment(result?.date).format("DD MMM YYYY")}
+                    {moment(result?.date, "DD-MM-YYYY").format("DD MMM YYYY")}
                   </span>
                 </span>
-                <div className="w-full flex flex-row flex-wrap justify-center gap-6 mb-5">
+                <div className="w-full flex flex-row flex-wrap justify-center gap-6 mb-5 text-slate-900">
                   <div className="rounded-xl bg-white p-3 flex flex-col justify-center items-center w-[120px] h-[130px] lg:w-[160px] lg:h-[170px]">
                     <FaHeadphones className="text-4xl lg:text-6xl mb-2" />
                     <span className="text-xl lg:text-3xl font-bold">
@@ -164,12 +169,19 @@ const MockResult = () => {
                   </span>
                 </div>
                 <button
-                  className="btn bg-white text-slate-800 border-0 my-2 ml-auto"
+                  className="btn bg-white text-slate-800 hover:bg-slate-200 border-0 my-2 ml-auto"
                   onClick={() => reset()}
                 >
                   Search again
                 </button>
                 <span className="text-white block w-full text-center mt-10">
+                  Your result will be deleted automatically from our server
+                  within 1 week.
+                </span>
+                <span className="text-white block w-full text-center mt-0">
+                  You may take a screenshot of this page for future use.
+                </span>
+                <span className="text-white block w-full text-center mt-1">
                   For any inquiries, please contact{" "}
                   <a
                     href="tel:01937805552"
@@ -180,7 +192,7 @@ const MockResult = () => {
                 </span>
               </div>
             ) : (
-              <>
+              <div className="flex flex-col gap-3">
                 <div className="bg-white p-3 rounded-lg text-slate-800 text-center text-lg flex flex-col gap-1">
                   <span>
                     There is no result published with the provided ID/number and
@@ -209,7 +221,7 @@ const MockResult = () => {
                 >
                   Search again
                 </button>
-              </>
+              </div>
             )}
           </div>
         )}

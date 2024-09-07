@@ -24,7 +24,7 @@ const App = () => {
           content="Brave Education BD | Register,IELTS Mock Test,Spoken English,EXAM registration,IELTS"
         />
         <meta name="robots" content="index, follow" />
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="English" />
         <meta name="author" content="Brave Education BD" />
       </Helmet>
