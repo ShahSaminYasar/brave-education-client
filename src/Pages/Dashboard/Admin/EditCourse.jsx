@@ -527,7 +527,7 @@ const EditCourse = () => {
                       </label>
                       <select
                         name="speaking_date"
-                        className="select select-bordered select-md"
+                        className="select bg-white select-bordered select-md"
                         onChange={(e) =>
                           setSpeakingMockDateValue(e.target.value)
                         }

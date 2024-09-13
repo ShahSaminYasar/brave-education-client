@@ -10,6 +10,7 @@ import {
 import MockHeader from "./MockHeader";
 import { Helmet } from "react-helmet";
 import toast from "react-hot-toast";
+import { MdDateRange } from "react-icons/md";
 
 const MockResult = () => {
   const [step, setStep] = useState(1);
@@ -87,17 +88,20 @@ const MockResult = () => {
                   <span className="text-white text-md font-semibold">
                     Date of test
                   </span>
-                  <input
-                    type="date"
-                    name="date"
-                    required
-                    className="input input-bordered min-w-[280px] bg-white text-slate-900"
-                  />
+                  <div className="relative">
+                    <input
+                      type="date"
+                      name="date"
+                      required
+                      className="input input-bordered min-w-[280px] bg-white text-slate-900"
+                    />
+                    <MdDateRange className="text-lg text-slate-700 absolute top-[50%] -translate-y-[50%] right-3 pointer-events-none" />
+                  </div>
                 </div>
               </div>
               <button
                 type="submit"
-                className="btn bg-red-600 text-white border-0 disabled:opacity-80"
+                className="btn bg-red-600 text-white border-0 disabled:bg-red-800 disabled:opacity-80"
                 disabled={loading}
               >
                 {loading ? "Loading..." : "Check Result"}
